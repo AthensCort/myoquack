@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: myoquack_db
+    restart: always
+    environment:
+      POSTGRES_USER: myoquack
+      POSTGRES_PASSWORD: myoquackpass
+      POSTGRES_DB: myoquack
+    ports:
+      - "5432:5432"
+    volumes:
+      - myoquack_pgdata:/var/lib/postgresql/data
+
+volumes:
+  myoquack_pgdata:

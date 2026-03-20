@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Doctor {
+  id_medico      String   @id
+  password_hash  String
+  nombre_completo String
+  fecha_creacion DateTime @default(now())
+
+  pacientes      Paciente[]
+}
+
+model Paciente {
+  id_paciente    String   @id
+  id_medico      String
+  nombre         String
+  apellidos      String
+  edad           Int
+  genero         String
+  lado_trabajo   String
+  notas_clinicas String?
+  fecha_registro DateTime @default(now())
+
+  doctor         Doctor   @relation(fields: [id_medico], references: [id_medico])
+  sesiones       SesionEMG[]
+}
+
+model SesionEMG {
+  id_sesion            Int      @id @default(autoincrement())
+  id_paciente          String
+  nombre_reporte       String?
+  fecha_hora           DateTime @default(now())
+
+  // Calibración
+  musculo              String
+  config_threshold_uv  Float
+
+  // Pre-juego config
+  config_gain          Float
+  config_offset_mv     Float
+  tiempo_juego_segundos Int
+
+  // (Sin “Juego”: no guardamos total_patitos / total_contracciones si no quieres)
+  // Puedes mantener stats si igual las calculas post-proceso:
+  stat_avg_peak        Float?
+  stat_avg_rms         Float?
+  stat_avg_iemg        Float?
+  stat_avg_duracion    Float?
+
+  paciente             Paciente @relation(fields: [id_paciente], references: [id_paciente])
+  eventos              EventoContraccion[]
+}
+
+model EventoContraccion {
+  id_evento          Int     @id @default(autoincrement())
+  id_sesion          Int
+  numero_orden       Int
+  timestamp_segundos Float
+  peak_uv            Float
+  rms                Float
+  iemg               Float
+  duracion_segundos  Float
+  waveform_data      Json
+
+  sesion             SesionEMG @relation(fields: [id_sesion], references: [id_sesion])
+}
