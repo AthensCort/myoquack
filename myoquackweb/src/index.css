@@ -21,6 +21,11 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background: #ffffff;
+  }
+
+  .dark body {
+    background: #020617;
   }
   
   img,
@@ -30,4 +35,17 @@
     display: block;
     max-width: 100%;
   }
+}
+
+.dark input,
+.dark select,
+.dark textarea {
+  border-color: #334155;
+  background-color: #020617;
+  color: #f8fafc;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #64748b;
 }

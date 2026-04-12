@@ -1,9 +1,9 @@
 import { useToast } from '../../context/ToastContext'
 
 const toastStyles = {
-  success: 'border-emerald-200 bg-emerald-50 text-emerald-800',
-  error: 'border-rose-200 bg-rose-50 text-rose-800',
-  info: 'border-blue-200 bg-blue-50 text-blue-800',
+  success: 'border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-700 dark:bg-emerald-950 dark:text-emerald-100',
+  error: 'border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-700 dark:bg-rose-950 dark:text-rose-100',
+  info: 'border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-700 dark:bg-slate-900 dark:text-blue-100',
 }
 
 export function ToastViewport() {

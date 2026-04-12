@@ -60,7 +60,7 @@ export function PreGamePage() {
   if (!selectedPatient || !currentSessionDraft) {
     return (
       <Card title="Configuracion previa al juego" subtitle="RF-05">
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-slate-600 dark:text-slate-300">
           No hay paciente o sesion seleccionada. Inicie una sesion desde Registros.
         </p>
         <button
@@ -77,7 +77,7 @@ export function PreGamePage() {
   if (!calibration) {
     return (
       <Card title="Configuracion previa al juego" subtitle="RF-05">
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-slate-600 dark:text-slate-300">
           Debe completar la calibracion antes de configurar esta etapa.
         </p>
         <button
@@ -117,7 +117,7 @@ export function PreGamePage() {
             id="config_gain"
             type="number"
             {...register('config_gain', { valueAsNumber: true })}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.config_gain && (
             <p className="mt-1 text-xs text-rose-600">{errors.config_gain.message}</p>
@@ -133,7 +133,7 @@ export function PreGamePage() {
             type="number"
             step="0.1"
             {...register('config_offset_mv', { valueAsNumber: true })}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.config_offset_mv && (
             <p className="mt-1 text-xs text-rose-600">{errors.config_offset_mv.message}</p>
@@ -149,7 +149,7 @@ export function PreGamePage() {
             type="number"
             step="0.1"
             {...register('config_threshold_uv', { valueAsNumber: true })}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.config_threshold_uv && (
             <p className="mt-1 text-xs text-rose-600">
@@ -158,14 +158,14 @@ export function PreGamePage() {
           )}
         </div>
 
-        <div className="rounded-xl border border-blue-100 bg-softBlue p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
+        <div className="rounded-xl border border-blue-100 bg-softBlue p-4 dark:border-slate-700 dark:bg-slate-950">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">
             Umbral de calibracion
           </p>
-          <p className="mt-1 text-lg font-bold text-primary">
+          <p className="mt-1 text-lg font-bold text-primary dark:text-blue-200">
             {calibration.threshold_uv.toFixed(2)} uV
           </p>
-          <p className="mt-1 text-xs text-slate-500">
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
             Puede ajustar manualmente el umbral final.
           </p>
         </div>
@@ -178,7 +178,7 @@ export function PreGamePage() {
             id="minutos"
             type="number"
             {...register('minutos', { valueAsNumber: true })}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
         </div>
 
@@ -190,14 +190,14 @@ export function PreGamePage() {
             id="segundos"
             type="number"
             {...register('segundos', { valueAsNumber: true })}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.segundos && (
             <p className="mt-1 text-xs text-rose-600">{errors.segundos.message}</p>
           )}
         </div>
 
-        <div className="md:col-span-2 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
+        <div className="md:col-span-2 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
           Tiempo total del juego: <strong>{totalSeconds}</strong> segundos
         </div>
 
@@ -205,7 +205,7 @@ export function PreGamePage() {
           <button
             type="button"
             onClick={() => navigate('/calibration')}
-            className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold"
+            className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold dark:border-slate-600 dark:text-slate-100"
           >
             Volver
           </button>

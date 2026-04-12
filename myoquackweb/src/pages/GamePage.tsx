@@ -13,7 +13,7 @@ export function GamePage() {
   if (!selectedPatient || !currentSessionDraft || !calibration || !config) {
     return (
       <Card title="Vista del juego" subtitle="RF-06 (sin logica de juego)">
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-slate-600 dark:text-slate-300">
           Falta informacion de configuracion previa. Complete calibracion y
           configuracion antes de entrar al juego.
         </p>
@@ -28,7 +28,7 @@ export function GamePage() {
           <button
             type="button"
             onClick={() => navigate('/records')}
-            className="rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary"
+            className="rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary dark:border-blue-400 dark:text-blue-200"
           >
             Ir a Registros
           </button>
@@ -44,11 +44,11 @@ export function GamePage() {
       className="w-full"
     >
       <div className="grid gap-6 md:grid-cols-2">
-        <div className="rounded-2xl border border-blue-100 bg-softBlue p-4">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-600">
+        <div className="rounded-2xl border border-blue-100 bg-softBlue p-4 dark:border-slate-700 dark:bg-slate-950">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">
             Paciente y sesion activa
           </h3>
-          <ul className="mt-3 space-y-1 text-sm text-textDark">
+          <ul className="mt-3 space-y-1 text-sm text-textDark dark:text-slate-100">
             <li>
               <strong>Paciente:</strong> {selectedPatient.nombre} {selectedPatient.apellidos}
             </li>
@@ -73,8 +73,8 @@ export function GamePage() {
           </ul>
         </div>
 
-        <div className="rounded-2xl border border-blue-100 bg-white p-4">
-          <p className="text-sm text-slate-600">
+        <div className="rounded-2xl border border-blue-100 bg-white p-4 dark:border-slate-700 dark:bg-slate-950">
+          <p className="text-sm text-slate-600 dark:text-slate-300">
             Presione el boton para simular el fin de sesion y generar automaticamente
             eventos de contraccion, metricas y reporte.
           </p>
@@ -82,7 +82,7 @@ export function GamePage() {
             <button
               type="button"
               onClick={() => navigate('/pre-game')}
-              className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold"
+              className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold dark:border-slate-600 dark:text-slate-100"
             >
               Volver a configuracion
             </button>

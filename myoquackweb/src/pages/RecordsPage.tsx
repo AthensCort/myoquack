@@ -70,7 +70,7 @@ export function RecordsPage() {
             <button
               type="button"
               onClick={() => void downloadPatientsCsv()}
-              className="w-full rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary sm:w-auto"
+              className="w-full rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary dark:border-blue-400 dark:text-blue-200 sm:w-auto"
             >
               Descargar CSV de pacientes
             </button>
@@ -88,11 +88,11 @@ export function RecordsPage() {
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
               placeholder="ID o nombre..."
-              className="w-full rounded-xl border border-slate-200 px-3 py-2"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
             />
-            <div className="overflow-x-auto rounded-xl border border-blue-100">
-              <table className="min-w-[680px] w-full divide-y divide-blue-100 text-sm">
-                <thead className="bg-softBlue text-left text-xs uppercase tracking-wide text-slate-600">
+            <div className="overflow-x-auto rounded-xl border border-blue-100 dark:border-slate-700">
+              <table className="min-w-[680px] w-full divide-y divide-blue-100 text-sm dark:divide-slate-700">
+                <thead className="bg-softBlue text-left text-xs uppercase tracking-wide text-slate-600 dark:bg-slate-800 dark:text-slate-300">
                   <tr>
                     <th className="px-3 py-2">ID</th>
                     <th className="px-3 py-2">Nombre</th>
@@ -102,10 +102,10 @@ export function RecordsPage() {
                     <th className="px-3 py-2">Registro</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-blue-50">
+                <tbody className="divide-y divide-blue-50 dark:divide-slate-800">
                   {filteredPatients.length === 0 && (
                     <tr>
-                      <td className="px-3 py-3 text-slate-500" colSpan={6}>
+                      <td className="px-3 py-3 text-slate-500 dark:text-slate-400" colSpan={6}>
                         No hay pacientes para mostrar.
                       </td>
                     </tr>
@@ -116,7 +116,9 @@ export function RecordsPage() {
                       <tr
                         key={patient.id_paciente}
                         className={`cursor-pointer transition ${
-                          isSelected ? 'bg-blue-50' : 'hover:bg-slate-50'
+                          isSelected
+                            ? 'bg-blue-50 dark:bg-blue-950/50'
+                            : 'hover:bg-slate-50 dark:hover:bg-slate-800/70'
                         }`}
                         onClick={() => setSelectedPatientId(patient.id_paciente)}
                       >
@@ -134,20 +136,20 @@ export function RecordsPage() {
             </div>
           </div>
 
-          <div className="min-w-0 rounded-2xl border border-blue-100 bg-blue-50/40 p-4">
-            <h3 className="text-lg font-bold text-textDark">
+          <div className="min-w-0 rounded-2xl border border-blue-100 bg-blue-50/40 p-4 dark:border-slate-700 dark:bg-slate-950/70">
+            <h3 className="text-lg font-bold text-textDark dark:text-slate-50">
               {selectedPatient
                 ? `Sesiones de ${selectedPatient.nombre} ${selectedPatient.apellidos}`
                 : 'Seleccione un paciente'}
             </h3>
             {selectedPatient && (
-              <p className="mt-1 text-xs text-slate-500">
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                 ID: {selectedPatient.id_paciente} | Lado: {selectedPatient.lado_trabajo}
               </p>
             )}
-            <div className="mt-4 overflow-x-auto rounded-xl border border-blue-100 bg-white">
-              <table className="min-w-[860px] w-full divide-y divide-blue-100 text-xs">
-                <thead className="bg-softBlue text-left uppercase tracking-wide text-slate-600">
+            <div className="mt-4 overflow-x-auto rounded-xl border border-blue-100 bg-white dark:border-slate-700 dark:bg-slate-900">
+              <table className="min-w-[860px] w-full divide-y divide-blue-100 text-xs dark:divide-slate-700">
+                <thead className="bg-softBlue text-left uppercase tracking-wide text-slate-600 dark:bg-slate-800 dark:text-slate-300">
                   <tr>
                     <th className="px-2 py-2">ID Sesion</th>
                     <th className="px-2 py-2">Reporte</th>
@@ -160,16 +162,16 @@ export function RecordsPage() {
                     <th className="px-2 py-2">CSV</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-blue-50">
+                <tbody className="divide-y divide-blue-50 dark:divide-slate-800">
                   {sessions.length === 0 && (
                     <tr>
-                      <td className="px-2 py-3 text-slate-500" colSpan={9}>
+                      <td className="px-2 py-3 text-slate-500 dark:text-slate-400" colSpan={9}>
                         Este paciente aun no tiene sesiones guardadas.
                       </td>
                     </tr>
                   )}
                   {sessions.map((session) => (
-                    <tr key={session.id_sesion} className="hover:bg-slate-50">
+                    <tr key={session.id_sesion} className="hover:bg-slate-50 dark:hover:bg-slate-800/70">
                       <td className="px-2 py-2 font-semibold">{session.id_sesion}</td>
                       <td className="px-2 py-2">{session.nombre_reporte}</td>
                       <td className="px-2 py-2">{formatDateTime(session.fecha_hora)}</td>
@@ -184,7 +186,7 @@ export function RecordsPage() {
                         <button
                           type="button"
                           onClick={() => void downloadSessionEventsCsv(session.id_sesion)}
-                          className="rounded-lg border border-primary px-2 py-1 font-semibold text-primary"
+                          className="rounded-lg border border-primary px-2 py-1 font-semibold text-primary dark:border-blue-400 dark:text-blue-200"
                         >
                           Descargar
                         </button>
@@ -206,7 +208,7 @@ export function RecordsPage() {
               <button
                 type="button"
                 onClick={() => navigate('/reports')}
-                className="w-full rounded-xl border border-primary2 px-4 py-2 text-sm font-semibold text-primary2 sm:w-auto"
+                className="w-full rounded-xl border border-primary2 px-4 py-2 text-sm font-semibold text-primary2 dark:border-blue-400 dark:text-blue-200 sm:w-auto"
               >
                 Ir a Reportes
               </button>

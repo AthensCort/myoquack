@@ -75,7 +75,7 @@ export function RegisterPage() {
             type="text"
             autoComplete="username"
             {...register('id_medico')}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.id_medico && (
             <p className="mt-1 text-xs text-rose-600">{errors.id_medico.message}</p>
@@ -91,7 +91,7 @@ export function RegisterPage() {
             type="text"
             autoComplete="name"
             {...register('nombre_completo')}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.nombre_completo && (
             <p className="mt-1 text-xs text-rose-600">{errors.nombre_completo.message}</p>
@@ -107,7 +107,7 @@ export function RegisterPage() {
             type="password"
             autoComplete="new-password"
             {...register('password')}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.password && (
             <p className="mt-1 text-xs text-rose-600">{errors.password.message}</p>
@@ -123,7 +123,7 @@ export function RegisterPage() {
             type="password"
             autoComplete="new-password"
             {...register('confirmPassword')}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.confirmPassword && (
             <p className="mt-1 text-xs text-rose-600">{errors.confirmPassword.message}</p>
@@ -142,7 +142,7 @@ export function RegisterPage() {
           </button>
           <Link
             to="/login"
-            className="w-full rounded-xl border border-primary px-4 py-2.5 text-center text-sm font-semibold text-primary"
+            className="w-full rounded-xl border border-primary px-4 py-2.5 text-center text-sm font-semibold text-primary dark:border-blue-400 dark:text-blue-200"
           >
             Volver a iniciar sesion
           </Link>

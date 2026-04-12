@@ -68,7 +68,7 @@ export function PatientNewPage() {
             id="nombre"
             type="text"
             {...register('nombre')}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.nombre && (
             <p className="mt-1 text-xs text-rose-600">{errors.nombre.message}</p>
@@ -83,7 +83,7 @@ export function PatientNewPage() {
             id="apellidos"
             type="text"
             {...register('apellidos')}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.apellidos && (
             <p className="mt-1 text-xs text-rose-600">{errors.apellidos.message}</p>
@@ -98,7 +98,7 @@ export function PatientNewPage() {
             id="edad"
             type="number"
             {...register('edad', { valueAsNumber: true })}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.edad && (
             <p className="mt-1 text-xs text-rose-600">{errors.edad.message}</p>
@@ -112,7 +112,7 @@ export function PatientNewPage() {
           <select
             id="genero"
             {...register('genero')}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           >
             <option value="M">M</option>
             <option value="F">F</option>
@@ -130,7 +130,7 @@ export function PatientNewPage() {
           <select
             id="lado_trabajo"
             {...register('lado_trabajo')}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           >
             <option value="Izquierdo">Izquierdo</option>
             <option value="Derecho">Derecho</option>
@@ -149,7 +149,7 @@ export function PatientNewPage() {
             id="notas_clinicas"
             rows={4}
             {...register('notas_clinicas')}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.notas_clinicas && (
             <p className="mt-1 text-xs text-rose-600">{errors.notas_clinicas.message}</p>
@@ -160,7 +160,7 @@ export function PatientNewPage() {
           <button
             type="button"
             onClick={() => navigate('/records')}
-            className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-textDark"
+            className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-textDark dark:border-slate-600 dark:text-slate-100"
           >
             Cancelar
           </button>
