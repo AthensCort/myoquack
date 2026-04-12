@@ -17,7 +17,9 @@ export function Navbar() {
             <p className="truncate text-sm font-semibold tracking-wide text-softBlue">
               MyoQuack
             </p>
-            <p className="truncate text-xs text-blue-100">EMG Physiotherapy Platform</p>
+            <p className="truncate text-xs text-blue-100">
+              Plataforma de fisioterapia EMG
+            </p>
           </div>
         </div>
 
@@ -43,7 +45,7 @@ export function Navbar() {
               to="/login"
               className="rounded-lg bg-accentYellow px-4 py-2 text-sm font-semibold text-primary"
             >
-              Login
+              Ingresar
             </NavLink>
           )}
         </nav>
@@ -61,7 +63,7 @@ export function Navbar() {
               }}
               className="rounded-lg bg-accentYellow px-3 py-2 text-sm font-bold text-primary sm:px-4"
             >
-              Logout
+              Cerrar sesion
             </button>
           </div>
         )}

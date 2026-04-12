@@ -55,8 +55,8 @@ export function LoginPage() {
 
   return (
     <Card
-      title="Login Doctor"
-      subtitle="Autenticacion contra la API MyoQuack"
+      title="Inicio de sesion"
+      subtitle="Autenticacion contra la API de MyoQuack"
       className="w-full max-w-md border-primary2/20"
     >
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -106,12 +106,12 @@ export function LoginPage() {
             to="/register"
             className="w-full rounded-xl border border-primary px-4 py-2.5 text-center text-sm font-semibold text-primary"
           >
-            Registrar
+            Crear cuenta
           </Link>
         </div>
       </form>
       <p className="mt-4 text-xs text-slate-500">
-        API base URL: <strong>{getApiBaseUrl()}</strong>
+        URL base de la API: <strong>{getApiBaseUrl()}</strong>
       </p>
       <p className="mt-2 text-xs text-slate-500">
         Si usaste el seed del backend, prueba <strong>DOC001</strong> / <strong>123456</strong>.

@@ -133,13 +133,13 @@ export function CalibrationPage() {
       mvc_uv: mvcUv,
       threshold_uv: threshold,
     })
-    addToast('Calibracion finalizada. Threshold calculado al 70% MVC.', 'success')
+    addToast('Calibracion finalizada. Umbral calculado al 70% MVC.', 'success')
     navigate('/pre-game')
   }
 
   return (
     <Card
-      title="EMG Calibration"
+      title="Calibracion EMG"
       subtitle={`Paciente: ${selectedPatient.nombre} ${selectedPatient.apellidos}`}
       className="w-full"
     >
@@ -171,7 +171,7 @@ export function CalibrationPage() {
                 onClick={startCalibration}
                 className="rounded-xl bg-accentYellow px-4 py-2 text-sm font-bold text-primary"
               >
-                Start Calibration
+                Iniciar calibracion
               </button>
             ) : (
               <button
@@ -179,7 +179,7 @@ export function CalibrationPage() {
                 onClick={finishCalibration}
                 className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white"
               >
-                Finish Calibration
+                Finalizar calibracion
               </button>
             )}
             <button
@@ -199,7 +199,7 @@ export function CalibrationPage() {
               <strong>MVC:</strong> {formatNumber(mvcUv)} uV
             </p>
             <p>
-              <strong>Threshold (70% MVC):</strong> {formatNumber(thresholdUv)} uV
+              <strong>Umbral (70% MVC):</strong> {formatNumber(thresholdUv)} uV
             </p>
           </div>
         </div>

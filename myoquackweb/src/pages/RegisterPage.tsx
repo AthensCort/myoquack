@@ -49,11 +49,11 @@ export function RegisterPage() {
   const onSubmit = async (values: RegisterFormValues) => {
     try {
       await registerDoctor(values.id_medico, values.nombre_completo, values.password)
-      addToast('Doctor registrado correctamente.', 'success')
+      addToast('Medico registrado correctamente.', 'success')
       navigate('/records', { replace: true })
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'No fue posible registrar el doctor.'
+        error instanceof Error ? error.message : 'No fue posible registrar el medico.'
       setError('root', { type: 'manual', message })
       addToast(message, 'error')
     }
@@ -61,8 +61,8 @@ export function RegisterPage() {
 
   return (
     <Card
-      title="Registrar Doctor"
-      subtitle="Crear una nueva cuenta de doctor en la API"
+      title="Registrar medico"
+      subtitle="Crear una nueva cuenta de medico en la API"
       className="w-full max-w-md border-primary2/20"
     >
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -138,13 +138,13 @@ export function RegisterPage() {
             disabled={isSubmitting}
             className="w-full rounded-xl bg-accentYellow px-4 py-2.5 text-sm font-bold text-primary disabled:opacity-70"
           >
-            {isSubmitting ? 'Registrando...' : 'Crear Cuenta'}
+            {isSubmitting ? 'Registrando...' : 'Crear cuenta'}
           </button>
           <Link
             to="/login"
             className="w-full rounded-xl border border-primary px-4 py-2.5 text-center text-sm font-semibold text-primary"
           >
-            Volver a Login
+            Volver a iniciar sesion
           </Link>
         </div>
       </form>

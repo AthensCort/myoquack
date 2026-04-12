@@ -12,10 +12,10 @@ export function GamePage() {
 
   if (!selectedPatient || !currentSessionDraft || !calibration || !config) {
     return (
-      <Card title="Game Placeholder" subtitle="RF-06 (sin logica de juego)">
+      <Card title="Vista del juego" subtitle="RF-06 (sin logica de juego)">
         <p className="text-sm text-slate-600">
-          Falta informacion de pre-game. Complete calibracion y configuracion antes
-          de entrar al game.
+          Falta informacion de configuracion previa. Complete calibracion y
+          configuracion antes de entrar al juego.
         </p>
         <div className="mt-4 flex gap-2">
           <button
@@ -23,7 +23,7 @@ export function GamePage() {
             onClick={() => navigate('/pre-game')}
             className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white"
           >
-            Ir a Pre-Game
+            Ir a configuracion
           </button>
           <button
             type="button"
@@ -39,8 +39,8 @@ export function GamePage() {
 
   return (
     <Card
-      title="Game (Coming soon)"
-      subtitle="El juego real no esta implementado. Esta vista solo simula fin de sesion."
+      title="Juego (proximamente)"
+      subtitle="El juego real no esta implementado. Esta vista solo simula el fin de la sesion."
       className="w-full"
     >
       <div className="grid gap-6 md:grid-cols-2">
@@ -59,13 +59,13 @@ export function GamePage() {
               <strong>Musculo:</strong> {calibration.musculo}
             </li>
             <li>
-              <strong>Gain:</strong> {config.config_gain}
+              <strong>Ganancia:</strong> {config.config_gain}
             </li>
             <li>
-              <strong>Offset:</strong> {config.config_offset_mv} mV
+              <strong>Desplazamiento:</strong> {config.config_offset_mv} mV
             </li>
             <li>
-              <strong>Threshold:</strong> {config.config_threshold_uv} uV
+              <strong>Umbral:</strong> {config.config_threshold_uv} uV
             </li>
             <li>
               <strong>Tiempo:</strong> {config.tiempo_juego_segundos} s
@@ -84,7 +84,7 @@ export function GamePage() {
               onClick={() => navigate('/pre-game')}
               className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold"
             >
-              Back to Pre-Game
+              Volver a configuracion
             </button>
             <button
               type="button"
@@ -95,7 +95,7 @@ export function GamePage() {
               }}
               className="rounded-xl bg-accentYellow px-4 py-2 text-sm font-bold text-primary"
             >
-              Simulate Session End
+              Simular fin de sesion
             </button>
           </div>
         </div>

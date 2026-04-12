@@ -14,8 +14,8 @@ export function ReportsPage() {
   return (
     <>
       <Card
-        title="Report Management"
-        subtitle="RF-08: guardar, descargar y eliminar sesiones in-memory"
+        title="Gestion de reportes"
+        subtitle="RF-08: guardar, descargar y eliminar sesiones"
       >
         <div className="overflow-x-auto">
           <table className="w-full min-w-[760px] divide-y divide-blue-100 text-sm">
@@ -67,7 +67,7 @@ export function ReportsPage() {
                         onClick={() => setSessionToDelete(session.id_sesion)}
                         className="rounded-lg border border-rose-300 px-2 py-1 text-xs font-semibold text-rose-700"
                       >
-                        Delete
+                        Eliminar
                       </button>
                     </div>
                   </td>

@@ -72,7 +72,7 @@ export function ResultsPage() {
 
   if (!simulation || !selectedPatient) {
     return (
-      <Card title="Resultados de Sesion" subtitle="RF-07">
+      <Card title="Resultados de sesion" subtitle="RF-07">
         <p className="text-sm text-slate-600">
           No hay resultados disponibles. Simule una sesion desde /game.
         </p>
@@ -81,7 +81,7 @@ export function ResultsPage() {
           onClick={() => navigate('/game')}
           className="mt-4 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white"
         >
-          Ir a Game
+          Ir al juego
         </button>
       </Card>
     )
@@ -92,12 +92,15 @@ export function ResultsPage() {
       label: 'Contracciones efectivas',
       value: simulation.total_contracciones_efectivas,
     },
-    { label: 'Total patitos', value: simulation.report.total_patitos },
-    { label: 'Avg Peak (uV)', value: formatNumber(simulation.report.stat_avg_peak) },
-    { label: 'Avg RMS', value: formatNumber(simulation.report.stat_avg_rms) },
-    { label: 'Avg IEMG', value: formatNumber(simulation.report.stat_avg_iemg) },
+    { label: 'Total de patitos', value: simulation.report.total_patitos },
     {
-      label: 'Avg Duracion (s)',
+      label: 'Promedio de pico (uV)',
+      value: formatNumber(simulation.report.stat_avg_peak),
+    },
+    { label: 'Promedio RMS', value: formatNumber(simulation.report.stat_avg_rms) },
+    { label: 'Promedio IEMG', value: formatNumber(simulation.report.stat_avg_iemg) },
+    {
+      label: 'Promedio de duracion (s)',
       value: formatNumber(simulation.report.stat_avg_duracion),
     },
   ]
@@ -136,7 +139,7 @@ export function ResultsPage() {
     void (async () => {
       try {
         const saved = await saveCurrentSession(reportName)
-        downloadJson(`session_${saved.session.id_sesion}_report.json`, {
+        downloadJson(`sesion_${saved.session.id_sesion}_reporte.json`, {
           patient: selectedPatient,
           session: saved.session,
           eventos: saved.events,
@@ -155,7 +158,7 @@ export function ResultsPage() {
 
   const downloadCurrentReport = () => {
     downloadJson(
-      `draft_report_${selectedPatient.id_paciente}_${new Date()
+      `borrador_reporte_${selectedPatient.id_paciente}_${new Date()
         .toISOString()
         .slice(0, 19)
         .replaceAll(':', '-')}.json`,
@@ -177,7 +180,7 @@ export function ResultsPage() {
       return
     }
     downloadTextFile(
-      `draft_events_${selectedPatient.id_paciente}.csv`,
+      `borrador_eventos_${selectedPatient.id_paciente}.csv`,
       eventsToCsv(events),
       'text/csv;charset=utf-8',
     )
@@ -185,7 +188,7 @@ export function ResultsPage() {
 
   return (
     <div className="space-y-6">
-      <Card title="Resultados de Sesion (RF-07)">
+      <Card title="Resultados de sesion (RF-07)">
         <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
           <div>
             <label htmlFor="reportName" className="mb-1 block text-sm font-semibold">
@@ -209,35 +212,35 @@ export function ResultsPage() {
               onClick={saveSession}
               className="w-full rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white sm:w-auto"
             >
-              Save Session
+              Guardar sesion
             </button>
             <button
               type="button"
               onClick={saveAndDownload}
               className="w-full rounded-xl bg-accentYellow px-4 py-2 text-sm font-bold text-primary sm:w-auto"
             >
-              Save & Download
+              Guardar y descargar
             </button>
             <button
               type="button"
               onClick={downloadCurrentReport}
               className="w-full rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary sm:w-auto"
             >
-              Download Report (JSON)
+              Descargar reporte (JSON)
             </button>
             <button
               type="button"
               onClick={() => downloadEventsCsv(simulation.events)}
               className="w-full rounded-xl border border-primary2 px-4 py-2 text-sm font-semibold text-primary2 sm:w-auto"
             >
-              Download CSV events
+              Descargar eventos en CSV
             </button>
             <button
               type="button"
               onClick={() => navigate('/records')}
               className="w-full rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold sm:w-auto"
             >
-              Back to Records
+              Volver a registros
             </button>
           </div>
         </div>
@@ -251,7 +254,7 @@ export function ResultsPage() {
         ))}
       </div>
 
-      <Card title="Waveform Preview">
+      <Card title="Vista previa de la onda">
         {!selectedWaveformEvent ? (
           <p className="text-sm text-slate-600">No hay eventos para visualizar.</p>
         ) : (
@@ -275,7 +278,7 @@ export function ResultsPage() {
         )}
       </Card>
 
-      <Card title="Analisis por Contraccion">
+      <Card title="Analisis por contraccion">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[720px] divide-y divide-blue-100 text-sm">
             <thead className="bg-softBlue text-left text-xs uppercase tracking-wide text-slate-600">
@@ -288,14 +291,14 @@ export function ResultsPage() {
                   onSort={handleSort}
                 />
                 <SortableHeader
-                  label="Timestamp (s)"
+                  label="Tiempo (s)"
                   sortKey="timestamp_segundos"
                   currentSort={sortKey}
                   direction={sortDirection}
                   onSort={handleSort}
                 />
                 <SortableHeader
-                  label="Peak (uV)"
+                  label="Pico (uV)"
                   sortKey="peak_uv"
                   currentSort={sortKey}
                   direction={sortDirection}
@@ -375,7 +378,7 @@ function SortableHeader({
         className="inline-flex items-center gap-1 font-semibold text-slate-700"
       >
         {label}
-        <span className="text-[10px]">{active ? (direction === 'asc' ? '▲' : '▼') : ''}</span>
+        <span className="text-[10px]">{active ? (direction === 'asc' ? '^' : 'v') : ''}</span>
       </button>
     </th>
   )

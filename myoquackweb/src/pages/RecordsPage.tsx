@@ -48,7 +48,7 @@ export function RecordsPage() {
   return (
     <>
       <Card
-        title="Pantalla 2 - Registros"
+        title="Registros"
         subtitle="RF-03: consulta de pacientes, sesiones y flujo de nueva sesion"
         actions={
           <div className="flex w-full flex-wrap gap-2 sm:w-auto">
@@ -57,7 +57,7 @@ export function RecordsPage() {
               onClick={() => navigate('/patients/new')}
               className="w-full rounded-xl bg-accentYellow px-4 py-2 text-sm font-bold text-primary sm:w-auto"
             >
-              Registrar Paciente
+              Nuevo paciente
             </button>
             <button
               type="button"
@@ -72,7 +72,7 @@ export function RecordsPage() {
               onClick={() => void downloadPatientsCsv()}
               className="w-full rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary sm:w-auto"
             >
-              Descargar CSV Pacientes
+              Descargar CSV de pacientes
             </button>
           </div>
         }
@@ -155,7 +155,7 @@ export function RecordsPage() {
                     <th className="px-2 py-2">Musculo</th>
                     <th className="px-2 py-2">Contr.</th>
                     <th className="px-2 py-2">Patitos</th>
-                    <th className="px-2 py-2">Threshold</th>
+                    <th className="px-2 py-2">Umbral</th>
                     <th className="px-2 py-2">Tiempo</th>
                     <th className="px-2 py-2">CSV</th>
                   </tr>

@@ -55,7 +55,7 @@ export function PatientNewPage() {
 
   return (
     <Card
-      title="Registro de Paciente"
+      title="Nuevo paciente"
       subtitle="RF-02: alta de paciente y redireccion automatica a calibracion"
       className="w-full"
     >
@@ -169,7 +169,7 @@ export function PatientNewPage() {
             disabled={isSubmitting}
             className="rounded-xl bg-accentYellow px-4 py-2 text-sm font-bold text-primary disabled:opacity-70"
           >
-            Guardar Paciente
+            Guardar paciente
           </button>
         </div>
       </form>

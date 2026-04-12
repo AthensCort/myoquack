@@ -21,12 +21,12 @@ router.post("/register", async (req, res) => {
         const password = String(req.body?.password ?? "");
         if (!id_medico || !nombre_completo || !password) {
             return res.status(400).json({
-                error: "id_medico, nombre_completo y password son obligatorios",
+                error: "id_medico, nombre_completo y contrasena son obligatorios",
             });
         }
         if (password.length < 6) {
             return res.status(400).json({
-                error: "La password debe tener al menos 6 caracteres",
+                error: "La contrasena debe tener al menos 6 caracteres",
             });
         }
         const existingDoctor = await prisma.doctor.findUnique({
@@ -64,7 +64,7 @@ router.post("/login", async (req, res) => {
         const password = String(req.body?.password ?? "");
         if (!id_medico || !password) {
             return res.status(400).json({
-                error: "id_medico y password son obligatorios",
+                error: "id_medico y contrasena son obligatorios",
             });
         }
         const doctor = await prisma.doctor.findUnique({

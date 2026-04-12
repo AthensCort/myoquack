@@ -59,7 +59,7 @@ export function PreGamePage() {
 
   if (!selectedPatient || !currentSessionDraft) {
     return (
-      <Card title="Pre-Game Configuration" subtitle="RF-05">
+      <Card title="Configuracion previa al juego" subtitle="RF-05">
         <p className="text-sm text-slate-600">
           No hay paciente o sesion seleccionada. Inicie una sesion desde Registros.
         </p>
@@ -76,9 +76,9 @@ export function PreGamePage() {
 
   if (!calibration) {
     return (
-      <Card title="Pre-Game Configuration" subtitle="RF-05">
+      <Card title="Configuracion previa al juego" subtitle="RF-05">
         <p className="text-sm text-slate-600">
-          Debe completar calibracion antes de configurar pre-game.
+          Debe completar la calibracion antes de configurar esta etapa.
         </p>
         <button
           type="button"
@@ -104,14 +104,14 @@ export function PreGamePage() {
 
   return (
     <Card
-      title="Pre-Game Configuration"
+      title="Configuracion previa al juego"
       subtitle={`Paciente: ${selectedPatient.nombre} ${selectedPatient.apellidos} | Musculo: ${calibration.musculo}`}
       className="w-full"
     >
       <form className="grid gap-4 md:grid-cols-2" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="config_gain" className="mb-1 block text-sm font-semibold">
-            Gain (1-500)
+            Ganancia (1-500)
           </label>
           <input
             id="config_gain"
@@ -126,7 +126,7 @@ export function PreGamePage() {
 
         <div>
           <label htmlFor="config_offset_mv" className="mb-1 block text-sm font-semibold">
-            Offset (mV)
+            Desplazamiento (mV)
           </label>
           <input
             id="config_offset_mv"
@@ -142,7 +142,7 @@ export function PreGamePage() {
 
         <div>
           <label htmlFor="config_threshold_uv" className="mb-1 block text-sm font-semibold">
-            Threshold (uV)
+            Umbral (uV)
           </label>
           <input
             id="config_threshold_uv"
@@ -160,13 +160,13 @@ export function PreGamePage() {
 
         <div className="rounded-xl border border-blue-100 bg-softBlue p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
-            Threshold de calibracion
+            Umbral de calibracion
           </p>
           <p className="mt-1 text-lg font-bold text-primary">
             {calibration.threshold_uv.toFixed(2)} uV
           </p>
           <p className="mt-1 text-xs text-slate-500">
-            Puede ajustar manualmente el threshold final.
+            Puede ajustar manualmente el umbral final.
           </p>
         </div>
 
@@ -214,7 +214,7 @@ export function PreGamePage() {
             disabled={isSubmitting}
             className="rounded-xl bg-accentYellow px-4 py-2 text-sm font-bold text-primary"
           >
-            Confirmar y continuar a Game
+            Confirmar y continuar al juego
           </button>
         </div>
       </form>
