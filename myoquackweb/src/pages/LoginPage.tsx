@@ -55,8 +55,8 @@ export function LoginPage() {
 
   return (
     <Card
-      title="Login Doctor"
-      subtitle="Autenticacion contra la API MyoQuack"
+      title="Inicio de sesion"
+      subtitle="Autenticacion contra la API de MyoQuack"
       className="w-full max-w-md border-primary2/20"
     >
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -69,7 +69,7 @@ export function LoginPage() {
             type="text"
             autoComplete="username"
             {...register('id_medico')}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.id_medico && (
             <p className="mt-1 text-xs text-rose-600">{errors.id_medico.message}</p>
@@ -85,7 +85,7 @@ export function LoginPage() {
             type="password"
             autoComplete="current-password"
             {...register('password')}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.password && (
             <p className="mt-1 text-xs text-rose-600">{errors.password.message}</p>
@@ -104,16 +104,16 @@ export function LoginPage() {
           </button>
           <Link
             to="/register"
-            className="w-full rounded-xl border border-primary px-4 py-2.5 text-center text-sm font-semibold text-primary"
+            className="w-full rounded-xl border border-primary px-4 py-2.5 text-center text-sm font-semibold text-primary dark:border-blue-400 dark:text-blue-200"
           >
-            Registrar
+            Crear cuenta
           </Link>
         </div>
       </form>
-      <p className="mt-4 text-xs text-slate-500">
-        API base URL: <strong>{getApiBaseUrl()}</strong>
+      <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">
+        URL base de la API: <strong>{getApiBaseUrl()}</strong>
       </p>
-      <p className="mt-2 text-xs text-slate-500">
+      <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
         Si usaste el seed del backend, prueba <strong>DOC001</strong> / <strong>123456</strong>.
       </p>
     </Card>

@@ -14,12 +14,12 @@ export function ReportsPage() {
   return (
     <>
       <Card
-        title="Report Management"
-        subtitle="RF-08: guardar, descargar y eliminar sesiones in-memory"
+        title="Gestion de reportes"
+        subtitle="RF-08: guardar, descargar y eliminar sesiones"
       >
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[760px] divide-y divide-blue-100 text-sm">
-            <thead className="bg-softBlue text-left text-xs uppercase tracking-wide text-slate-600">
+        <div className="overflow-x-auto rounded-xl border border-blue-100 dark:border-slate-700">
+          <table className="w-full min-w-[760px] divide-y divide-blue-100 text-sm dark:divide-slate-700">
+            <thead className="bg-softBlue text-left text-xs uppercase tracking-wide text-slate-600 dark:bg-slate-800 dark:text-slate-300">
               <tr>
                 <th className="px-3 py-2">ID Sesion</th>
                 <th className="px-3 py-2">Paciente</th>
@@ -30,16 +30,16 @@ export function ReportsPage() {
                 <th className="px-3 py-2">Acciones</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-blue-50">
+            <tbody className="divide-y divide-blue-50 dark:divide-slate-800">
               {reports.length === 0 && (
                 <tr>
-                  <td className="px-3 py-3 text-slate-500" colSpan={7}>
+                  <td className="px-3 py-3 text-slate-500 dark:text-slate-400" colSpan={7}>
                     No hay sesiones guardadas.
                   </td>
                 </tr>
               )}
               {reports.map(({ session, patient }) => (
-                <tr key={session.id_sesion} className="hover:bg-slate-50">
+                <tr key={session.id_sesion} className="hover:bg-slate-50 dark:hover:bg-slate-800/70">
                   <td className="px-3 py-2 font-semibold">{session.id_sesion}</td>
                   <td className="px-3 py-2">{`${patient.nombre} ${patient.apellidos}`}</td>
                   <td className="px-3 py-2">{session.nombre_reporte}</td>
@@ -51,14 +51,14 @@ export function ReportsPage() {
                       <button
                         type="button"
                         onClick={() => void downloadSessionJson(session.id_sesion)}
-                        className="rounded-lg border border-primary px-2 py-1 text-xs font-semibold text-primary"
+                        className="rounded-lg border border-primary px-2 py-1 text-xs font-semibold text-primary dark:border-blue-400 dark:text-blue-200"
                       >
                         JSON
                       </button>
                       <button
                         type="button"
                         onClick={() => void downloadSessionEventsCsv(session.id_sesion)}
-                        className="rounded-lg border border-primary2 px-2 py-1 text-xs font-semibold text-primary2"
+                        className="rounded-lg border border-primary2 px-2 py-1 text-xs font-semibold text-primary2 dark:border-blue-400 dark:text-blue-200"
                       >
                         CSV
                       </button>
@@ -67,7 +67,7 @@ export function ReportsPage() {
                         onClick={() => setSessionToDelete(session.id_sesion)}
                         className="rounded-lg border border-rose-300 px-2 py-1 text-xs font-semibold text-rose-700"
                       >
-                        Delete
+                        Eliminar
                       </button>
                     </div>
                   </td>

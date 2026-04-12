@@ -118,7 +118,7 @@ router.get("/", async (req, res) => {
         const patientId = String(req.query.patientId ?? "").trim();
         if (!patientId) {
             return res.status(400).json({
-                error: "patientId es requerido",
+                error: "El ID del paciente es obligatorio",
             });
         }
         const sessions = await prisma.sesionEMG.findMany({

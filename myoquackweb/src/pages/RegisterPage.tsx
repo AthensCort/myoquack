@@ -49,11 +49,11 @@ export function RegisterPage() {
   const onSubmit = async (values: RegisterFormValues) => {
     try {
       await registerDoctor(values.id_medico, values.nombre_completo, values.password)
-      addToast('Doctor registrado correctamente.', 'success')
+      addToast('Medico registrado correctamente.', 'success')
       navigate('/records', { replace: true })
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'No fue posible registrar el doctor.'
+        error instanceof Error ? error.message : 'No fue posible registrar el medico.'
       setError('root', { type: 'manual', message })
       addToast(message, 'error')
     }
@@ -61,8 +61,8 @@ export function RegisterPage() {
 
   return (
     <Card
-      title="Registrar Doctor"
-      subtitle="Crear una nueva cuenta de doctor en la API"
+      title="Registrar medico"
+      subtitle="Crear una nueva cuenta de medico en la API"
       className="w-full max-w-md border-primary2/20"
     >
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -75,7 +75,7 @@ export function RegisterPage() {
             type="text"
             autoComplete="username"
             {...register('id_medico')}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.id_medico && (
             <p className="mt-1 text-xs text-rose-600">{errors.id_medico.message}</p>
@@ -91,7 +91,7 @@ export function RegisterPage() {
             type="text"
             autoComplete="name"
             {...register('nombre_completo')}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.nombre_completo && (
             <p className="mt-1 text-xs text-rose-600">{errors.nombre_completo.message}</p>
@@ -107,7 +107,7 @@ export function RegisterPage() {
             type="password"
             autoComplete="new-password"
             {...register('password')}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.password && (
             <p className="mt-1 text-xs text-rose-600">{errors.password.message}</p>
@@ -123,7 +123,7 @@ export function RegisterPage() {
             type="password"
             autoComplete="new-password"
             {...register('confirmPassword')}
-            className="w-full rounded-xl border border-slate-200 px-3 py-2"
+            className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
           {errors.confirmPassword && (
             <p className="mt-1 text-xs text-rose-600">{errors.confirmPassword.message}</p>
@@ -138,13 +138,13 @@ export function RegisterPage() {
             disabled={isSubmitting}
             className="w-full rounded-xl bg-accentYellow px-4 py-2.5 text-sm font-bold text-primary disabled:opacity-70"
           >
-            {isSubmitting ? 'Registrando...' : 'Crear Cuenta'}
+            {isSubmitting ? 'Registrando...' : 'Crear cuenta'}
           </button>
           <Link
             to="/login"
-            className="w-full rounded-xl border border-primary px-4 py-2.5 text-center text-sm font-semibold text-primary"
+            className="w-full rounded-xl border border-primary px-4 py-2.5 text-center text-sm font-semibold text-primary dark:border-blue-400 dark:text-blue-200"
           >
-            Volver a Login
+            Volver a iniciar sesion
           </Link>
         </div>
       </form>

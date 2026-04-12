@@ -18,7 +18,7 @@ npm run dev
 ```
 
 ## API Login
-- Crear `.env` con `VITE_API_URL=http://localhost:4000`
+- Crear `.env` con `VITE_API_URL=https://myoquack-production.up.railway.app`
 - El login del front consume `POST /auth/login`
 - Si ejecutaste el seed del backend: `DOC001 / 123456`
 

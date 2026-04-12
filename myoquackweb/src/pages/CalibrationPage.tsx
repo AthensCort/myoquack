@@ -61,7 +61,7 @@ export function CalibrationPage() {
   if (!selectedPatient) {
     return (
       <Card title="Calibracion EMG" subtitle="RF-04">
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-slate-600 dark:text-slate-300">
           No hay paciente seleccionado. Seleccione un paciente desde Registros.
         </p>
         <div className="mt-4">
@@ -80,7 +80,7 @@ export function CalibrationPage() {
   if (!currentSessionDraft) {
     return (
       <Card title="Calibracion EMG" subtitle="RF-04">
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-slate-600 dark:text-slate-300">
           Necesita crear una sesion nueva para iniciar calibracion.
         </p>
         <div className="mt-4 flex gap-2">
@@ -99,7 +99,7 @@ export function CalibrationPage() {
           <button
             type="button"
             onClick={() => navigate('/records')}
-            className="rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary"
+            className="rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary dark:border-blue-400 dark:text-blue-200"
           >
             Volver
           </button>
@@ -133,13 +133,13 @@ export function CalibrationPage() {
       mvc_uv: mvcUv,
       threshold_uv: threshold,
     })
-    addToast('Calibracion finalizada. Threshold calculado al 70% MVC.', 'success')
+    addToast('Calibracion finalizada. Umbral calculado al 70% MVC.', 'success')
     navigate('/pre-game')
   }
 
   return (
     <Card
-      title="EMG Calibration"
+      title="Calibracion EMG"
       subtitle={`Paciente: ${selectedPatient.nombre} ${selectedPatient.apellidos}`}
       className="w-full"
     >
@@ -154,7 +154,7 @@ export function CalibrationPage() {
               value={musculo}
               onChange={(event) => setMusculo(event.target.value as MusculoTrabajo)}
               disabled={isCalibrating}
-              className="w-full rounded-xl border border-slate-200 px-3 py-2"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
             >
               {MUSCLE_OPTIONS.map((option) => (
                 <option key={option} value={option}>
@@ -171,7 +171,7 @@ export function CalibrationPage() {
                 onClick={startCalibration}
                 className="rounded-xl bg-accentYellow px-4 py-2 text-sm font-bold text-primary"
               >
-                Start Calibration
+                Iniciar calibracion
               </button>
             ) : (
               <button
@@ -179,19 +179,19 @@ export function CalibrationPage() {
                 onClick={finishCalibration}
                 className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white"
               >
-                Finish Calibration
+                Finalizar calibracion
               </button>
             )}
             <button
               type="button"
               onClick={() => navigate('/records')}
-              className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold"
+              className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold dark:border-slate-600 dark:text-slate-100"
             >
               Cancelar
             </button>
           </div>
 
-          <div className="rounded-xl border border-blue-100 bg-softBlue p-4 text-sm">
+          <div className="rounded-xl border border-blue-100 bg-softBlue p-4 text-sm dark:border-slate-700 dark:bg-slate-950">
             <p>
               <strong>EMG actual:</strong> {formatNumber(currentEmgUv)} uV
             </p>
@@ -199,21 +199,21 @@ export function CalibrationPage() {
               <strong>MVC:</strong> {formatNumber(mvcUv)} uV
             </p>
             <p>
-              <strong>Threshold (70% MVC):</strong> {formatNumber(thresholdUv)} uV
+              <strong>Umbral (70% MVC):</strong> {formatNumber(thresholdUv)} uV
             </p>
           </div>
         </div>
 
-        <div className="space-y-4 rounded-2xl border border-blue-100 bg-white p-6">
-          <p className="text-sm font-semibold text-textDark">Visualizacion en tiempo real</p>
-          <div className="h-8 w-full overflow-hidden rounded-full bg-blue-100">
+        <div className="space-y-4 rounded-2xl border border-blue-100 bg-white p-6 dark:border-slate-700 dark:bg-slate-950">
+          <p className="text-sm font-semibold text-textDark dark:text-slate-50">Visualizacion en tiempo real</p>
+          <div className="h-8 w-full overflow-hidden rounded-full bg-blue-100 dark:bg-slate-800">
             <div
               className="h-full rounded-full bg-gradient-to-r from-accentBlue to-primary transition-[width] duration-150"
               style={{ width: `${barPercentage}%` }}
               aria-hidden
             />
           </div>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             Barra normalizada segun valor MVC y rango visual maximo.
           </p>
         </div>

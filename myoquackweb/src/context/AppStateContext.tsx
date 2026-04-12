@@ -233,19 +233,19 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
 
   const downloadPatientsCsv = async () => {
     const csv = await getPatientsCsvText()
-    const filename = `patients_${new Date().toISOString().slice(0, 10)}.csv`
+    const filename = `pacientes_${new Date().toISOString().slice(0, 10)}.csv`
     downloadTextFile(filename, csv, 'text/csv;charset=utf-8')
   }
 
   const downloadSessionEventsCsv = async (sessionId: string) => {
     const csv = await getSessionEventsCsvText(sessionId)
-    downloadTextFile(`session_${sessionId}_events.csv`, csv, 'text/csv;charset=utf-8')
+    downloadTextFile(`sesion_${sessionId}_eventos.csv`, csv, 'text/csv;charset=utf-8')
   }
 
   const downloadSessionJson = async (sessionId: string) => {
     const payload = await getSessionExportJsonText(sessionId)
     downloadTextFile(
-      `session_${sessionId}_report.json`,
+      `sesion_${sessionId}_reporte.json`,
       payload,
       'application/json;charset=utf-8',
     )

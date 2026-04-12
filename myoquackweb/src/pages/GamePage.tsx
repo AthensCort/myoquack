@@ -12,10 +12,10 @@ export function GamePage() {
 
   if (!selectedPatient || !currentSessionDraft || !calibration || !config) {
     return (
-      <Card title="Game Placeholder" subtitle="RF-06 (sin logica de juego)">
-        <p className="text-sm text-slate-600">
-          Falta informacion de pre-game. Complete calibracion y configuracion antes
-          de entrar al game.
+      <Card title="Vista del juego" subtitle="RF-06 (sin logica de juego)">
+        <p className="text-sm text-slate-600 dark:text-slate-300">
+          Falta informacion de configuracion previa. Complete calibracion y
+          configuracion antes de entrar al juego.
         </p>
         <div className="mt-4 flex gap-2">
           <button
@@ -23,12 +23,12 @@ export function GamePage() {
             onClick={() => navigate('/pre-game')}
             className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white"
           >
-            Ir a Pre-Game
+            Ir a configuracion
           </button>
           <button
             type="button"
             onClick={() => navigate('/records')}
-            className="rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary"
+            className="rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary dark:border-blue-400 dark:text-blue-200"
           >
             Ir a Registros
           </button>
@@ -39,16 +39,16 @@ export function GamePage() {
 
   return (
     <Card
-      title="Game (Coming soon)"
-      subtitle="El juego real no esta implementado. Esta vista solo simula fin de sesion."
+      title="Juego (proximamente)"
+      subtitle="El juego real no esta implementado. Esta vista solo simula el fin de la sesion."
       className="w-full"
     >
       <div className="grid gap-6 md:grid-cols-2">
-        <div className="rounded-2xl border border-blue-100 bg-softBlue p-4">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-600">
+        <div className="rounded-2xl border border-blue-100 bg-softBlue p-4 dark:border-slate-700 dark:bg-slate-950">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">
             Paciente y sesion activa
           </h3>
-          <ul className="mt-3 space-y-1 text-sm text-textDark">
+          <ul className="mt-3 space-y-1 text-sm text-textDark dark:text-slate-100">
             <li>
               <strong>Paciente:</strong> {selectedPatient.nombre} {selectedPatient.apellidos}
             </li>
@@ -59,13 +59,13 @@ export function GamePage() {
               <strong>Musculo:</strong> {calibration.musculo}
             </li>
             <li>
-              <strong>Gain:</strong> {config.config_gain}
+              <strong>Ganancia:</strong> {config.config_gain}
             </li>
             <li>
-              <strong>Offset:</strong> {config.config_offset_mv} mV
+              <strong>Desplazamiento:</strong> {config.config_offset_mv} mV
             </li>
             <li>
-              <strong>Threshold:</strong> {config.config_threshold_uv} uV
+              <strong>Umbral:</strong> {config.config_threshold_uv} uV
             </li>
             <li>
               <strong>Tiempo:</strong> {config.tiempo_juego_segundos} s
@@ -73,8 +73,8 @@ export function GamePage() {
           </ul>
         </div>
 
-        <div className="rounded-2xl border border-blue-100 bg-white p-4">
-          <p className="text-sm text-slate-600">
+        <div className="rounded-2xl border border-blue-100 bg-white p-4 dark:border-slate-700 dark:bg-slate-950">
+          <p className="text-sm text-slate-600 dark:text-slate-300">
             Presione el boton para simular el fin de sesion y generar automaticamente
             eventos de contraccion, metricas y reporte.
           </p>
@@ -82,9 +82,9 @@ export function GamePage() {
             <button
               type="button"
               onClick={() => navigate('/pre-game')}
-              className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold"
+              className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold dark:border-slate-600 dark:text-slate-100"
             >
-              Back to Pre-Game
+              Volver a configuracion
             </button>
             <button
               type="button"
@@ -95,7 +95,7 @@ export function GamePage() {
               }}
               className="rounded-xl bg-accentYellow px-4 py-2 text-sm font-bold text-primary"
             >
-              Simulate Session End
+              Simular fin de sesion
             </button>
           </div>
         </div>
