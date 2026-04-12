@@ -16,6 +16,7 @@ import { RegisterPage } from './pages/RegisterPage'
 import { RecordsPage } from './pages/RecordsPage'
 import { ReportsPage } from './pages/ReportsPage'
 import { ResultsPage } from './pages/ResultsPage'
+import { TestEsp32Page } from './pages/TestEsp32Page'
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
                   <Route path="/calibration" element={<CalibrationPage />} />
                   <Route path="/pre-game" element={<PreGamePage />} />
                   <Route path="/game" element={<GamePage />} />
+                  <Route path="/test-esp32" element={<TestEsp32Page />} />
                   <Route path="/results" element={<ResultsPage />} />
                   <Route path="/reports" element={<ReportsPage />} />
                 </Route>

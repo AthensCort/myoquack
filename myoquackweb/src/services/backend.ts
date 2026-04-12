@@ -226,6 +226,33 @@ export async function saveSessionToApi(reportName: string, draft: SessionDraft) 
   }
 }
 
+export async function saveEsp32TestSessionToApi(
+  reportName: string,
+  report: SesionEmg,
+  events: EventoContraccion[],
+) {
+  const created = await requestJson<ApiSessionMutationResponse>('/sesiones', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      reportName,
+      report: {
+        ...report,
+        fecha_hora: report.fecha_hora.toISOString(),
+        nombre_reporte: reportName,
+      },
+      events,
+    }),
+  })
+
+  return {
+    session: toSession(created.session),
+    events: created.events.map(toEvent),
+  }
+}
+
 export async function deleteSessionInApi(sessionId: string) {
   await requestText(`/sesiones/${sessionId}`, {
     method: 'DELETE',

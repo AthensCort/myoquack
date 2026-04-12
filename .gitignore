@@ -3,3 +3,4 @@
 **/.env
 .env.local
 **/.env.local
+ESP32/LedCounterWiFi/LedCounterWiFi.ino
