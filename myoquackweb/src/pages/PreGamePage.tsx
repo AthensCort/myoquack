@@ -46,8 +46,9 @@ export function PreGamePage() {
     defaultValues: {
       config_gain: existingConfig?.config_gain ?? 100,
       config_offset_mv: existingConfig?.config_offset_mv ?? 0,
-      config_threshold_uv:
+      config_threshold_uv: Math.round(
         existingConfig?.config_threshold_uv ?? calibration?.threshold_uv ?? 150,
+      ),
       minutos: defaultMinutes,
       segundos: defaultExtraSeconds,
     },
@@ -96,7 +97,7 @@ export function PreGamePage() {
     setPreGameConfigDraft({
       config_gain: values.config_gain,
       config_offset_mv: values.config_offset_mv,
-      config_threshold_uv: values.config_threshold_uv,
+      config_threshold_uv: Math.round(values.config_threshold_uv),
       tiempo_juego_segundos,
     })
     navigate('/game')
@@ -147,7 +148,7 @@ export function PreGamePage() {
           <input
             id="config_threshold_uv"
             type="number"
-            step="0.1"
+            step="1"
             {...register('config_threshold_uv', { valueAsNumber: true })}
             className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
           />
@@ -163,7 +164,7 @@ export function PreGamePage() {
             Umbral de calibracion
           </p>
           <p className="mt-1 text-lg font-bold text-primary dark:text-blue-200">
-            {calibration.threshold_uv.toFixed(2)} uV
+            {Math.round(calibration.threshold_uv)} uV
           </p>
           <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
             Puede ajustar manualmente el umbral final.

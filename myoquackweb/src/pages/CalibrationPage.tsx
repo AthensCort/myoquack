@@ -26,7 +26,7 @@ export function CalibrationPage() {
   const [selectedMuscle, setSelectedMuscle] = useState<MusculoTrabajo>('Gluteus Medius')
 
   // El umbral se calcula como el 75% del MVC alcanzado
-  const threshold = mvc * 0.75
+  const threshold = Math.round(mvc * 0.75)
 
   // 1. Lógica del Temporizador y Guardado Automático
   useEffect(() => {
@@ -44,7 +44,7 @@ export function CalibrationPage() {
         setCalibrationDraft({
           musculo: selectedMuscle,
           mvc_uv: mvc,
-          threshold_uv: threshold
+          threshold_uv: threshold,
         })
 
         addToast('¡Calibración completada con éxito!', 'success')
@@ -150,7 +150,7 @@ export function CalibrationPage() {
             </p>
             <p className="text-slate-300 flex justify-between border-t border-slate-800 pt-2">
               <span>Umbral Sugerido (75%):</span>
-              <span className="text-accentYellow font-bold">{threshold.toFixed(1)} uV</span>
+              <span className="text-accentYellow font-bold">{threshold} uV</span>
             </p>
           </div>
         </section>
