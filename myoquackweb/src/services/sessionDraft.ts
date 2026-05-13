@@ -167,7 +167,7 @@ function buildSimulationFromDraft(
     config_threshold_uv: draft.config!.config_threshold_uv,
     tiempo_juego_segundos: draft.config!.tiempo_juego_segundos,
     total_contracciones: events.length,
-    total_patitos: events.length,
+    total_patitos: events.length, // En simulación, asumimos que todas cazaron pato
     stat_avg_peak: round(avgPeak, 3),
     stat_avg_rms: round(avgRms, 3),
     stat_avg_iemg: round(avgIemg, 3),
@@ -231,6 +231,16 @@ export function finalizeSessionFromSimulation(): SessionSimulationResult {
   const draft = getRequiredDraftWithConfig()
   draft.simulation = buildSimulationFromDraft(draft)
   return cloneSimulation(draft.simulation)
+}
+
+// 👇 NUEVA FUNCIÓN AÑADIDA AQUÍ
+export function injectRealGameResults(simulationResult: SessionSimulationResult): SessionDraft {
+  const draft = getRequiredDraftWithConfig()
+  
+  // Clonamos el resultado para asegurarnos de no alterar las referencias originales
+  draft.simulation = cloneSimulation(simulationResult)
+  
+  return cloneDraft(draft)
 }
 
 export function markDraftSessionSaved(

@@ -11,14 +11,15 @@ interface ApiErrorResponse {
   error?: string
 }
 
+// 1. Updated ApiPatient to match the backend serializer
 interface ApiPatient {
   id_paciente: string
   id_medico: string
   nombre: string
   apellidos: string
-  edad: number
+  fecha_nacimiento: string // Replaced edad
   genero: Paciente['genero']
-  lado_trabajo: Paciente['lado_trabajo']
+  // removed lado_trabajo
   notas_clinicas: string
   fecha_registro: string
 }
@@ -107,11 +108,14 @@ async function requestText(path: string, init?: RequestInit) {
   return text
 }
 
+// 2. Updated toPatient mapping
 function toPatient(patient: ApiPatient): Paciente {
   return {
     ...patient,
+    // ensure notes exist to satisfy TS
     notas_clinicas: patient.notas_clinicas ?? '',
-    fecha_registro: new Date(patient.fecha_registro),
+    fecha_registro: patient.fecha_registro,
+    fecha_nacimiento: patient.fecha_nacimiento, // Added new mapping
   }
 }
 
@@ -132,13 +136,13 @@ function toEvent(event: ApiEvent): EventoContraccion {
   }
 }
 
+// 3. Updated CreatePatientInput
 export interface CreatePatientInput {
   nombre: string
   apellidos: string
-  edad: number
-  genero: Paciente['genero']
-  lado_trabajo: Paciente['lado_trabajo']
-  notas_clinicas: string
+  fecha_nacimiento: string // Changed from edad: number
+  genero: 'M' | 'F'
+  notas_clinicas?: string
 }
 
 export async function listPatientsFromApi() {

@@ -9,9 +9,8 @@ export function buildPatientsCsv(rows) {
     const headers = [
         "id_paciente",
         "nombre_completo",
-        "edad",
+        "fecha_nacimiento",
         "genero",
-        "lado_trabajo",
         "fecha_registro",
         "session_count",
         "last_session_date",
@@ -19,9 +18,8 @@ export function buildPatientsCsv(rows) {
     const csvRows = rows.map((row) => [
         row.id_paciente,
         row.nombre_completo,
-        row.edad,
+        row.fecha_nacimiento,
         row.genero,
-        row.lado_trabajo,
         row.fecha_registro,
         row.session_count,
         row.last_session_date,

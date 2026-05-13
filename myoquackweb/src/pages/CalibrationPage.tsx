@@ -1,223 +1,189 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Card } from '../components/common/Card'
-import { useAppState } from '../context/AppStateContext'
+import { useHardware } from '../context/HardwareContext'
 import { useToast } from '../context/ToastContext'
-import { MUSCLE_OPTIONS } from '../data/seed'
+import { useAppState } from '../context/AppStateContext'
+import { LineChart, Line, YAxis, ResponsiveContainer, CartesianGrid, ReferenceLine } from 'recharts'
 import type { MusculoTrabajo } from '../models/types'
-import { formatNumber } from '../utils/format'
 
 export function CalibrationPage() {
-  const navigate = useNavigate()
-  const {
-    selectedPatient,
-    selectedPatientId,
-    currentSessionDraft,
-    startSessionDraft,
-    setCalibrationDraft,
-  } = useAppState()
+  const { isConnected, emgValue, emgHistory } = useHardware()
   const { addToast } = useToast()
-  const timerRef = useRef<number | null>(null)
-  const initialMuscle = currentSessionDraft?.calibration?.musculo ?? MUSCLE_OPTIONS[0]
-  const [musculo, setMusculo] = useState<MusculoTrabajo>(initialMuscle)
-  const [isCalibrating, setIsCalibrating] = useState(false)
-  const [currentEmgUv, setCurrentEmgUv] = useState(0)
-  const [mvcUv, setMvcUv] = useState(currentSessionDraft?.calibration?.mvc_uv ?? 0)
-  const [thresholdUv, setThresholdUv] = useState(
-    currentSessionDraft?.calibration?.threshold_uv ?? 0,
-  )
+  
+  // Extraemos currentSessionDraft para validar que existe una sesión activa
+  const { selectedPatient, setCalibrationDraft, currentSessionDraft } = useAppState() 
+  const navigate = useNavigate()
 
+  // Nombre seguro del paciente para la UI
+  const patientName = selectedPatient 
+    ? `${selectedPatient.nombre} ${selectedPatient.apellidos || ''}`.trim() 
+    : 'Ningún paciente seleccionado'
+
+  // Estados de calibración
+  const [isCalibrating, setIsCalibrating] = useState(false)
+  const [timeLeft, setTimeLeft] = useState(30)
+  const [mvc, setMvc] = useState<number>(0) 
+  const [selectedMuscle, setSelectedMuscle] = useState<MusculoTrabajo>('Gluteus Medius')
+
+  // El umbral se calcula como el 75% del MVC alcanzado
+  const threshold = mvc * 0.75
+
+  // 1. Lógica del Temporizador y Guardado Automático
   useEffect(() => {
-    return () => {
-      if (timerRef.current) {
-        window.clearInterval(timerRef.current)
+    let timer: ReturnType<typeof setInterval>
+    
+    if (isCalibrating && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prev) => prev - 1)
+      }, 1000)
+    } else if (isCalibrating && timeLeft === 0) {
+      setIsCalibrating(false)
+      
+      try {
+        // IMPORTANTE: Usamos mvc_uv y threshold_uv para que coincida con la interfaz y el servicio
+        setCalibrationDraft({
+          musculo: selectedMuscle,
+          mvc_uv: mvc,
+          threshold_uv: threshold
+        })
+
+        addToast('¡Calibración completada con éxito!', 'success')
+        
+        // REDIRECCIÓN: Apunta directamente a /pre-game
+        setTimeout(() => {
+          navigate('/pre-game') 
+        }, 1500)
+
+      } catch (error) {
+        console.error("Error al guardar calibración:", error)
+        addToast('Error: No se pudo guardar. Asegúrate de haber iniciado una sesión.', 'error')
       }
     }
-  }, [])
+    
+    return () => clearInterval(timer)
+  }, [isCalibrating, timeLeft, mvc, threshold, selectedMuscle, addToast, setCalibrationDraft, navigate])
 
+  // 2. Lógica de Detección de Pico Máximo (MVC)
   useEffect(() => {
-    if (!isCalibrating) {
+    if (isCalibrating && emgValue > mvc) {
+      setMvc(emgValue)
+    }
+  }, [emgValue, isCalibrating, mvc])
+
+  const handleStart = () => {
+    if (!isConnected) {
+      addToast('Conecta el dispositivo o usa el Modo Demo.', 'error')
       return
     }
-
-    timerRef.current = window.setInterval(() => {
-      const emgValue = Number((Math.random() * 2200 + 100).toFixed(2))
-      setCurrentEmgUv(emgValue)
-      setMvcUv((previous) => Math.max(previous, emgValue))
-    }, 180)
-
-    return () => {
-      if (timerRef.current) {
-        window.clearInterval(timerRef.current)
-      }
-    }
-  }, [isCalibrating])
-
-  const barPercentage = useMemo(() => {
-    const visualMax = Math.max(2500, mvcUv, 1)
-    return Math.min((currentEmgUv / visualMax) * 100, 100)
-  }, [currentEmgUv, mvcUv])
-
-  if (!selectedPatient) {
-    return (
-      <Card title="Calibracion EMG" subtitle="RF-04">
-        <p className="text-sm text-slate-600 dark:text-slate-300">
-          No hay paciente seleccionado. Seleccione un paciente desde Registros.
-        </p>
-        <div className="mt-4">
-          <button
-            type="button"
-            onClick={() => navigate('/records')}
-            className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white"
-          >
-            Ir a Registros
-          </button>
-        </div>
-      </Card>
-    )
-  }
-
-  if (!currentSessionDraft) {
-    return (
-      <Card title="Calibracion EMG" subtitle="RF-04">
-        <p className="text-sm text-slate-600 dark:text-slate-300">
-          Necesita crear una sesion nueva para iniciar calibracion.
-        </p>
-        <div className="mt-4 flex gap-2">
-          <button
-            type="button"
-            onClick={() => {
-              if (!selectedPatientId) {
-                return
-              }
-              startSessionDraft(selectedPatientId)
-            }}
-            className="rounded-xl bg-accentYellow px-4 py-2 text-sm font-bold text-primary"
-          >
-            Crear Borrador
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate('/records')}
-            className="rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary dark:border-blue-400 dark:text-blue-200"
-          >
-            Volver
-          </button>
-        </div>
-      </Card>
-    )
-  }
-
-  const startCalibration = () => {
-    setMvcUv(0)
-    setThresholdUv(0)
-    setCurrentEmgUv(0)
+    setMvc(0)
+    setTimeLeft(30)
     setIsCalibrating(true)
   }
 
-  const finishCalibration = () => {
-    if (timerRef.current) {
-      window.clearInterval(timerRef.current)
-    }
+  const handleCancel = () => {
     setIsCalibrating(false)
-
-    if (mvcUv <= 0) {
-      addToast('No se detectaron senales. Repita la calibracion.', 'error')
-      return
-    }
-
-    const threshold = Number((mvcUv * 0.7).toFixed(2))
-    setThresholdUv(threshold)
-    setCalibrationDraft({
-      musculo,
-      mvc_uv: mvcUv,
-      threshold_uv: threshold,
-    })
-    addToast('Calibracion finalizada. Umbral calculado al 70% MVC.', 'success')
-    navigate('/pre-game')
+    setTimeLeft(30)
+    setMvc(0)
   }
 
+  // Ajuste dinámico del eje Y en la gráfica
+  const yAxisMax = isCalibrating || mvc === 0 ? 4095 : mvc * 1.2
+
   return (
-    <Card
-      title="Calibracion EMG"
-      subtitle={`Paciente: ${selectedPatient.nombre} ${selectedPatient.apellidos}`}
-      className="w-full"
-    >
-      <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="musculo" className="mb-1 block text-sm font-semibold">
-              Musculo de trabajo
-            </label>
-            <select
-              id="musculo"
-              value={musculo}
-              onChange={(event) => setMusculo(event.target.value as MusculoTrabajo)}
+    <div className="space-y-6">
+      <header>
+        <h1 className="text-3xl font-black text-white">Calibración EMG</h1>
+        <p className="mt-1 text-slate-400">Paciente: <span className="font-semibold text-white">{patientName}</span></p>
+      </header>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* PANEL DE CONTROL */}
+        <section className="space-y-4">
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-300">Músculo a calibrar</label>
+            <select 
+              value={selectedMuscle}
+              onChange={(e) => setSelectedMuscle(e.target.value as MusculoTrabajo)}
               disabled={isCalibrating}
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+              className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-white focus:border-accentYellow outline-none"
             >
-              {MUSCLE_OPTIONS.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
+              <option value="Gluteus Medius">Gluteus Medius</option>
+              <option value="Biceps Brachii">Biceps Brachii</option>
+              <option value="Quadriceps">Quadriceps</option>
             </select>
           </div>
 
-          <div className="flex gap-2">
-            {!isCalibrating ? (
-              <button
-                type="button"
-                onClick={startCalibration}
-                className="rounded-xl bg-accentYellow px-4 py-2 text-sm font-bold text-primary"
-              >
-                Iniciar calibracion
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={finishCalibration}
-                className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white"
-              >
-                Finalizar calibracion
-              </button>
-            )}
+          <div className="flex gap-3">
             <button
-              type="button"
-              onClick={() => navigate('/records')}
-              className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold dark:border-slate-600 dark:text-slate-100"
+              onClick={handleStart}
+              // Bloqueado si no hay sesión activa (currentSessionDraft)
+              disabled={isCalibrating || !isConnected || !currentSessionDraft}
+              className="flex-1 rounded-lg bg-accentYellow px-6 py-3 font-bold text-primary transition-colors hover:brightness-110 disabled:opacity-50"
+            >
+              {isCalibrating ? `Calibrando... ${timeLeft}s` : 'Iniciar calibración'}
+            </button>
+            <button
+              onClick={handleCancel}
+              disabled={!isCalibrating}
+              className="rounded-lg border border-slate-600 px-6 py-3 font-semibold text-slate-300 transition-colors hover:bg-slate-800 disabled:opacity-50"
             >
               Cancelar
             </button>
           </div>
 
-          <div className="rounded-xl border border-blue-100 bg-softBlue p-4 text-sm dark:border-slate-700 dark:bg-slate-950">
-            <p>
-              <strong>EMG actual:</strong> {formatNumber(currentEmgUv)} uV
-            </p>
-            <p>
-              <strong>MVC:</strong> {formatNumber(mvcUv)} uV
-            </p>
-            <p>
-              <strong>Umbral (70% MVC):</strong> {formatNumber(thresholdUv)} uV
-            </p>
-          </div>
-        </div>
+          {!currentSessionDraft && (
+            <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-lg">
+              <p className="text-sm text-rose-400 font-medium">
+                ⚠️ Debes iniciar una sesión desde el expediente antes de calibrar.
+              </p>
+            </div>
+          )}
 
-        <div className="space-y-4 rounded-2xl border border-blue-100 bg-white p-6 dark:border-slate-700 dark:bg-slate-950">
-          <p className="text-sm font-semibold text-textDark dark:text-slate-50">Visualizacion en tiempo real</p>
-          <div className="h-8 w-full overflow-hidden rounded-full bg-blue-100 dark:bg-slate-800">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-accentBlue to-primary transition-[width] duration-150"
-              style={{ width: `${barPercentage}%` }}
-              aria-hidden
-            />
+          <div className="rounded-xl border border-slate-700 bg-slate-900/50 p-5 shadow-sm space-y-2 font-mono text-sm">
+            <p className="text-slate-300 flex justify-between">
+              <span>EMG Actual:</span>
+              <span className="text-white font-bold">{emgValue.toFixed(1)} uV</span>
+            </p>
+            <p className="text-slate-300 flex justify-between">
+              <span>MVC Alcanzado:</span>
+              <span className="text-blue-400 font-bold">{mvc.toFixed(1)} uV</span>
+            </p>
+            <p className="text-slate-300 flex justify-between border-t border-slate-800 pt-2">
+              <span>Umbral Sugerido (75%):</span>
+              <span className="text-accentYellow font-bold">{threshold.toFixed(1)} uV</span>
+            </p>
           </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            Barra normalizada segun valor MVC y rango visual maximo.
-          </p>
-        </div>
+        </section>
+
+        {/* PANEL DE GRÁFICA */}
+        <section className="rounded-xl border border-slate-700 bg-slate-900/50 p-6 flex flex-col">
+          <h3 className="mb-4 font-bold text-white">Señal en Tiempo Real</h3>
+          <div className="flex-1 min-h-[250px] w-full rounded-lg bg-slate-950 p-2 shadow-inner">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={emgHistory}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+                <YAxis domain={[0, yAxisMax]} stroke="#64748b" fontSize={10} />
+                <Line 
+                  type="monotone" 
+                  dataKey="value" 
+                  stroke={emgValue >= threshold && threshold > 0 ? '#facc15' : '#10b981'} 
+                  strokeWidth={2}
+                  dot={false}
+                  isAnimationActive={false}
+                />
+                {!isCalibrating && mvc > 0 && (
+                  <ReferenceLine 
+                    y={threshold} 
+                    stroke="#ef4444" 
+                    strokeDasharray="5 5" 
+                    label={{ position: 'right', value: '75%', fill: '#ef4444', fontSize: 10 }} 
+                  />
+                )}
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </section>
       </div>
-    </Card>
+    </div>
   )
 }

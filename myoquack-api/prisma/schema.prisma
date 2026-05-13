@@ -21,18 +21,17 @@ model Doctor {
 }
 
 model Paciente {
-  id_paciente    String   @id
-  id_medico      String
-  nombre         String
-  apellidos      String
-  edad           Int
-  genero         String
-  lado_trabajo   String
-  notas_clinicas String?
-  fecha_registro DateTime @default(now())
+  id_paciente      String      @id @default(cuid())
+  id_medico        String
+  nombre           String
+  apellidos        String
+  fecha_nacimiento DateTime
+  genero           String
+  notas_clinicas   String?
+  fecha_registro   DateTime    @default(now())
 
-  doctor         Doctor   @relation(fields: [id_medico], references: [id_medico])
-  sesiones       SesionEMG[]
+  doctor           Doctor      @relation(fields: [id_medico], references: [id_medico])
+  sesiones         SesionEMG[]
 }
 
 model SesionEMG {

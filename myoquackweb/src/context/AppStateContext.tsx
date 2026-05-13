@@ -38,6 +38,7 @@ import {
   markDraftSessionSaved,
   setCalibrationDraft as setCalibrationInDraft,
   setPreGameConfigDraft as setPreGameConfigInDraft,
+  injectRealGameResults // 👈 DEBES IMPORTAR LA NUEVA FUNCIÓN AQUÍ
 } from '../services/sessionDraft'
 import { downloadTextFile } from '../utils/download'
 import { useAuth } from './AuthContext'
@@ -56,6 +57,8 @@ interface AppStateValue {
   setCalibrationDraft: (calibration: CalibrationDraft) => SessionDraft
   setPreGameConfigDraft: (config: PreGameConfig) => SessionDraft
   simulateSessionEnd: () => SessionSimulationResult
+  // 👇 NUEVA FUNCIÓN PARA INYECTAR DATOS REALES DEL JUEGO
+  injectGameResults: (simulationResult: SessionSimulationResult) => void
   saveCurrentSession: (
     reportName: string,
   ) => Promise<{ session: SesionEmg; events: EventoContraccion[] }>
@@ -211,6 +214,13 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     return result
   }
 
+  // 👇 NUEVA FUNCIÓN IMPLEMENTADA
+  const injectGameResults = (simulationResult: SessionSimulationResult) => {
+    // Usamos la nueva función del servicio para inyectar y guardar los resultados reales
+    injectRealGameResults(simulationResult);
+    syncDraft(); // Actualizamos el estado del contexto
+  }
+
   const saveCurrentSession = async (reportName: string) => {
     const draft = getCurrentSessionDraft()
     if (!draft) {
@@ -265,6 +275,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     setCalibrationDraft,
     setPreGameConfigDraft,
     simulateSessionEnd,
+    injectGameResults, // 👈 AÑADIDA AL OBJETO DE VALORES
     saveCurrentSession,
     deleteSession,
     downloadPatientsCsv,

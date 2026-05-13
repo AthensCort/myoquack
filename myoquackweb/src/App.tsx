@@ -5,10 +5,15 @@ import { AppShell } from './components/layout/AppShell'
 import { PublicLayout } from './components/layout/PublicLayout'
 import { AppStateProvider } from './context/AppStateContext'
 import { AuthProvider } from './context/AuthContext'
-import { ThemeProvider } from './context/ThemeContext'
+import { ThemeProvider } from './context/ThemeContext' 
 import { ToastProvider } from './context/ToastContext'
+import { HardwareProvider } from './context/HardwareContext'
+
+// Pages
+import { MyoSignalPage } from './pages/MyoSignalPage'
 import { CalibrationPage } from './pages/CalibrationPage'
-import { GamePage } from './pages/GamePage'
+import { ConfiguracionPage } from './pages/ConfiguracionPage' 
+import { GamePage } from './pages/GamePage' 
 import { LoginPage } from './pages/LoginPage'
 import { PatientNewPage } from './pages/PatientNewPage'
 import { PreGamePage } from './pages/PreGamePage'
@@ -22,49 +27,42 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <ToastProvider>
-          <AppStateProvider>
-            <BrowserRouter>
-              <Routes>
-                <Route
-                  path="/login"
-                  element={
-                    <PublicLayout>
-                      <LoginPage />
-                    </PublicLayout>
-                  }
-                />
+          <HardwareProvider>
+            <AppStateProvider>
+              <BrowserRouter>
+                <Routes>
+                  {/* Rutas Públicas */}
+                  <Route path="/login" element={<PublicLayout><LoginPage /></PublicLayout>} />
+                  <Route path="/register" element={<PublicLayout><RegisterPage /></PublicLayout>} />
 
-                <Route
-                  path="/register"
-                  element={
-                    <PublicLayout>
-                      <RegisterPage />
-                    </PublicLayout>
-                  }
-                />
+                  {/* Rutas Protegidas */}
+                  <Route element={<ProtectedRoute><AppShell /></ProtectedRoute>}>
+                    <Route path="/" element={<Navigate to="/records" replace />} />
+                    <Route path="/records" element={<RecordsPage />} />
+                    <Route path="/patients/new" element={<PatientNewPage />} />
+                    <Route path="/myosignal" element={<MyoSignalPage />} />
+                    
+                    {/* Flujo de Sesión */}
+                    <Route path="/calibration" element={<CalibrationPage />} />
+                    <Route path="/configuracion" element={<ConfiguracionPage />} />
+                    <Route path="/pre-game" element={<PreGamePage />} />
+                    <Route path="/game" element={<GamePage />} />
+                    
+                    {/* Resultados y Reportes */}
+                    <Route path="/results" element={<ResultsPage />} />
+                    <Route path="/reports" element={<ReportsPage />} />
+                  </Route>
 
-                <Route
-                  element={
-                    <ProtectedRoute>
-                      <AppShell />
-                    </ProtectedRoute>
-                  }
-                >
-                  <Route path="/" element={<Navigate to="/records" replace />} />
-                  <Route path="/records" element={<RecordsPage />} />
-                  <Route path="/patients/new" element={<PatientNewPage />} />
-                  <Route path="/calibration" element={<CalibrationPage />} />
-                  <Route path="/pre-game" element={<PreGamePage />} />
-                  <Route path="/game" element={<GamePage />} />
-                  <Route path="/results" element={<ResultsPage />} />
-                  <Route path="/reports" element={<ReportsPage />} />
-                </Route>
-
-                <Route path="*" element={<Navigate to="/records" replace />} />
-              </Routes>
-              <ToastViewport />
-            </BrowserRouter>
-          </AppStateProvider>
+                  <Route path="*" element={<Navigate to="/records" replace />} />
+                </Routes>
+                
+                <ToastViewport />
+                
+                {/* DemoSeeder eliminado para limpieza de interfaz final */}
+                
+              </BrowserRouter>
+            </AppStateProvider>
+          </HardwareProvider>
         </ToastProvider>
       </AuthProvider>
     </ThemeProvider>

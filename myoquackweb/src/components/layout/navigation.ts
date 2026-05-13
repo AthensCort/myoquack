@@ -1,6 +1,7 @@
 export const dashboardLinks = [
   { to: '/records', label: 'Registros' },
   { to: '/patients/new', label: 'Nuevo paciente' },
+  { to: '/myosignal', label: 'MyoSignal' },
   { to: '/calibration', label: 'Calibracion' },
   { to: '/pre-game', label: 'Configuracion' },
   { to: '/game', label: 'Juego' },

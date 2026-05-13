@@ -21,17 +21,17 @@ export function serializeDoctor(doctor: Doctor) {
   };
 }
 
-export function serializePatient(patient: Paciente) {
+export function serializePatient(patient: any) {
   return {
     id_paciente: patient.id_paciente,
     id_medico: patient.id_medico,
     nombre: patient.nombre,
     apellidos: patient.apellidos,
-    edad: patient.edad,
+    // Send the date as a string, remove edad and lado_trabajo
+    fecha_nacimiento: patient.fecha_nacimiento ? patient.fecha_nacimiento.toISOString() : null,
     genero: patient.genero,
-    lado_trabajo: patient.lado_trabajo,
-    notas_clinicas: patient.notas_clinicas ?? "",
-    fecha_registro: patient.fecha_registro.toISOString(),
+    notas_clinicas: patient.notas_clinicas,
+    fecha_registro: patient.fecha_registro ? patient.fecha_registro.toISOString() : null,
   };
 }
 
