@@ -6,7 +6,6 @@ import { z } from 'zod'
 import { Card } from '../components/common/Card'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'
-import { getApiBaseUrl } from '../services/api'
 
 const loginSchema = z.object({
   id_medico: z.string().min(1, 'El ID del medico es requerido.'),
@@ -110,12 +109,6 @@ export function LoginPage() {
           </Link>
         </div>
       </form>
-      <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">
-        URL base de la API: <strong>{getApiBaseUrl()}</strong>
-      </p>
-      <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-        Si usaste el seed del backend, prueba <strong>DOC001</strong> / <strong>123456</strong>.
-      </p>
     </Card>
   )
 }
