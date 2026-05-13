@@ -6,6 +6,19 @@ import { useAppState } from '../context/AppStateContext'
 import { useToast } from '../context/ToastContext'
 import { formatDate, formatDateTime, formatNumber } from '../utils/format'
 
+// Helper to turn birthdate string into a calculated Age number
+function calculateAge(dobStr: string) {
+  if (!dobStr) return 'N/A'
+  const dob = new Date(dobStr)
+  const today = new Date()
+  let age = today.getFullYear() - dob.getFullYear()
+  const m = today.getMonth() - dob.getMonth()
+  if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+    age--
+  }
+  return age
+}
+
 export function RecordsPage() {
   const navigate = useNavigate()
   const {
@@ -49,7 +62,7 @@ export function RecordsPage() {
     <>
       <Card
         title="Registros"
-        subtitle="RF-03: consulta de pacientes, sesiones y flujo de nueva sesion"
+        subtitle="Consulta los registros de tus pacientes"
         actions={
           <div className="flex w-full flex-wrap gap-2 sm:w-auto">
             <button
@@ -78,6 +91,7 @@ export function RecordsPage() {
         }
       >
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+          {/* PATIENT LIST TABLE */}
           <div className="min-w-0 space-y-4">
             <label htmlFor="patient-search" className="block text-sm font-semibold">
               Buscar paciente
@@ -98,14 +112,14 @@ export function RecordsPage() {
                     <th className="px-3 py-2">Nombre</th>
                     <th className="px-3 py-2">Edad</th>
                     <th className="px-3 py-2">Genero</th>
-                    <th className="px-3 py-2">Lado</th>
+                    {/* Removed Lado column header */}
                     <th className="px-3 py-2">Registro</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-blue-50 dark:divide-slate-800">
                   {filteredPatients.length === 0 && (
                     <tr>
-                      <td className="px-3 py-3 text-slate-500 dark:text-slate-400" colSpan={6}>
+                      <td className="px-3 py-3 text-slate-500 dark:text-slate-400" colSpan={5}>
                         No hay pacientes para mostrar.
                       </td>
                     </tr>
@@ -124,10 +138,9 @@ export function RecordsPage() {
                       >
                         <td className="px-3 py-2 font-semibold">{patient.id_paciente}</td>
                         <td className="px-3 py-2">{`${patient.nombre} ${patient.apellidos}`}</td>
-                        <td className="px-3 py-2">{patient.edad}</td>
+                        <td className="px-3 py-2">{calculateAge(patient.fecha_nacimiento)}</td>
                         <td className="px-3 py-2">{patient.genero}</td>
-                        <td className="px-3 py-2">{patient.lado_trabajo}</td>
-                        <td className="px-3 py-2">{formatDate(patient.fecha_registro)}</td>
+                        <td className="px-3 py-2">{formatDate(new Date(patient.fecha_registro))}</td>
                       </tr>
                     )
                   })}
@@ -136,6 +149,7 @@ export function RecordsPage() {
             </div>
           </div>
 
+          {/* SESSION DETAILS PANEL */}
           <div className="min-w-0 rounded-2xl border border-blue-100 bg-blue-50/40 p-4 dark:border-slate-700 dark:bg-slate-950/70">
             <h3 className="text-lg font-bold text-textDark dark:text-slate-50">
               {selectedPatient
@@ -144,7 +158,7 @@ export function RecordsPage() {
             </h3>
             {selectedPatient && (
               <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                ID: {selectedPatient.id_paciente} | Lado: {selectedPatient.lado_trabajo}
+                ID: {selectedPatient.id_paciente}
               </p>
             )}
             <div className="mt-4 overflow-x-auto rounded-xl border border-blue-100 bg-white dark:border-slate-700 dark:bg-slate-900">

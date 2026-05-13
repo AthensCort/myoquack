@@ -57,9 +57,9 @@ router.get("/export/csv", async (req, res) => {
       patients.map((patient) => ({
         id_paciente: patient.id_paciente,
         nombre_completo: `${patient.nombre} ${patient.apellidos}`,
-        edad: patient.edad,
+        // Pass the Date of Birth instead of Age
+        fecha_nacimiento: patient.fecha_nacimiento.toISOString().split("T")[0], 
         genero: patient.genero,
-        lado_trabajo: patient.lado_trabajo,
         fecha_registro: patient.fecha_registro.toISOString(),
         session_count: patient.sesiones.length,
         last_session_date: patient.sesiones[0]?.fecha_hora.toISOString() ?? "",
@@ -81,26 +81,31 @@ router.post("/", async (req, res) => {
     const id_medico = req.user!.id_medico;
     const nombre = String(req.body?.nombre ?? "").trim();
     const apellidos = String(req.body?.apellidos ?? "").trim();
-    const edad = Number(req.body?.edad);
+    const fecha_nacimiento_str = String(req.body?.fecha_nacimiento ?? "").trim();
     const genero = String(req.body?.genero ?? "").trim();
-    const lado_trabajo = String(req.body?.lado_trabajo ?? "").trim();
-    const notas_clinicas = String(req.body?.notas_clinicas ?? "").trim();
+    
+    // Handle optional clinical notes
+    const notas_clinicas = req.body?.notas_clinicas 
+      ? String(req.body.notas_clinicas).trim() 
+      : null;
 
-    if (!nombre || !apellidos || !Number.isInteger(edad) || edad <= 0) {
+    if (!nombre || !apellidos || !fecha_nacimiento_str) {
       return res.status(400).json({
-        error: "Datos de paciente invalidos",
+        error: "Datos de paciente invalidos. Faltan campos obligatorios.",
       });
     }
 
-    if (!["M", "F", "O"].includes(genero)) {
+    // Convert string to Date object for Prisma
+    const fecha_nacimiento = new Date(fecha_nacimiento_str);
+    if (Number.isNaN(fecha_nacimiento.getTime())) {
       return res.status(400).json({
-        error: "Genero invalido",
+        error: "Fecha de nacimiento invalida",
       });
     }
 
-    if (!["Izquierdo", "Derecho", "Ambos"].includes(lado_trabajo)) {
+    if (!["M", "F"].includes(genero)) {
       return res.status(400).json({
-        error: "Lado de trabajo invalido",
+        error: "Genero invalido. Debe ser M o F.",
       });
     }
 
@@ -114,9 +119,8 @@ router.post("/", async (req, res) => {
         id_medico,
         nombre,
         apellidos,
-        edad,
+        fecha_nacimiento, // Sent to Prisma as a DateTime
         genero,
-        lado_trabajo,
         notas_clinicas,
       },
     });

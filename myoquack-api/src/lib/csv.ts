@@ -1,15 +1,14 @@
-interface PatientCsvRow {
+export interface PatientCsvRow {
   id_paciente: string;
   nombre_completo: string;
-  edad: number;
+  fecha_nacimiento: string;
   genero: string;
-  lado_trabajo: string;
   fecha_registro: string;
   session_count: number;
   last_session_date: string;
 }
 
-interface EventCsvRow {
+export interface EventCsvRow {
   id_evento: string;
   id_sesion: string;
   numero_orden: number;
@@ -34,9 +33,8 @@ export function buildPatientsCsv(rows: PatientCsvRow[]) {
   const headers = [
     "id_paciente",
     "nombre_completo",
-    "edad",
+    "fecha_nacimiento",
     "genero",
-    "lado_trabajo",
     "fecha_registro",
     "session_count",
     "last_session_date",
@@ -46,9 +44,8 @@ export function buildPatientsCsv(rows: PatientCsvRow[]) {
     [
       row.id_paciente,
       row.nombre_completo,
-      row.edad,
+      row.fecha_nacimiento,
       row.genero,
-      row.lado_trabajo,
       row.fecha_registro,
       row.session_count,
       row.last_session_date,

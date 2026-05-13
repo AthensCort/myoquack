@@ -1,7 +1,9 @@
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { Sun, Moon, Bird } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { useTheme } from '../../context/ThemeContext'
-import { dashboardLinks } from './navigation'
+// 1. Import the new button
+import { Esp32ConnectButton } from '../common/Esp32ConnectButton'
 
 export function Navbar() {
   const { currentDoctor, logout } = useAuth()
@@ -12,10 +14,12 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-primary2/50 bg-primary text-white dark:border-slate-700 dark:bg-slate-950">
       <div className="flex w-full items-center justify-between gap-3 px-3 py-3 sm:px-4 lg:px-8 xl:px-10 2xl:px-14">
+        {/* LEFT: Branding */}
         <div className="flex min-w-0 items-center gap-3">
-          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-accentBlue text-sm font-black sm:h-10 sm:w-10 dark:bg-accentYellow dark:text-slate-950">
-            MQ
+          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-accentBlue text-slate-950 sm:h-10 sm:w-10 dark:bg-accentYellow">
+            <Bird className="h-6 w-6" />
           </div>
+          
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold tracking-wide text-softBlue">
               MyoQuack
@@ -26,42 +30,23 @@ export function Navbar() {
           </div>
         </div>
 
-        <nav className="hidden items-center gap-4 lg:flex">
-          {currentDoctor &&
-            dashboardLinks.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                className={({ isActive }) =>
-                  `rounded-lg px-3 py-2 text-sm font-semibold transition ${
-                    isActive
-                      ? 'bg-white text-primary dark:bg-accentYellow dark:text-slate-950'
-                      : 'text-blue-100 hover:bg-primary2 hover:text-white dark:text-slate-300 dark:hover:bg-slate-800'
-                  }`
-                }
-              >
-                {link.label}
-              </NavLink>
-            ))}
-          {!currentDoctor && (
-            <NavLink
-              to="/login"
-              className="rounded-lg bg-accentYellow px-4 py-2 text-sm font-semibold text-primary"
-            >
-              Ingresar
-            </NavLink>
-          )}
-        </nav>
-
+        {/* RIGHT: Actions */}
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          
+          {/* 2. Insert the ESP32 Connection Button here */}
+          <Esp32ConnectButton />
+
           <button
             type="button"
             onClick={toggleTheme}
-            className="rounded-lg border border-white/30 px-3 py-2 text-xs font-bold text-blue-50 transition hover:bg-white/10 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-800"
-            aria-pressed={isDark}
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/30 transition hover:bg-white/10 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-800"
             aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
           >
-            {isDark ? 'Modo claro' : 'Modo oscuro'}
+            {isDark ? (
+              <Sun className="h-5 w-5 text-accentYellow" />
+            ) : (
+              <Moon className="h-5 w-5 text-blue-50" />
+            )}
           </button>
 
           {currentDoctor && (
@@ -80,16 +65,6 @@ export function Navbar() {
                 Cerrar sesion
               </button>
             </>
-          )}
-
-          {!currentDoctor && (
-            <button
-              type="button"
-              onClick={() => navigate('/login')}
-              className="hidden rounded-lg bg-accentYellow px-3 py-2 text-sm font-bold text-primary sm:block sm:px-4 lg:hidden"
-            >
-              Ingresar
-            </button>
           )}
         </div>
       </div>

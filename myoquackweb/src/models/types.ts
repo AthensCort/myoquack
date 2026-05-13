@@ -6,6 +6,7 @@ export type MusculoTrabajo =
   | 'Hamstrings'
   | 'Tibialis Anterior'
   | 'Gastrocnemius'
+  | 'Biceps Brachii' 
 
 export interface Doctor {
   id_medico: string
@@ -15,15 +16,15 @@ export interface Doctor {
 }
 
 export interface Paciente {
-  id_paciente: string
-  id_medico: string
-  nombre: string
-  apellidos: string
-  edad: number
-  genero: Genero
-  lado_trabajo: LadoTrabajo
-  notas_clinicas: string
-  fecha_registro: Date
+  id_paciente: string;
+  id_medico: string;
+  nombre: string;
+  apellidos: string;
+  fecha_nacimiento: string; // <-- Changed from 'edad: number'
+  genero: string;
+  notas_clinicas?: string;
+  fecha_registro: string;
+  // <-- lado_trabajo removed
 }
 
 export interface SesionEmg {
@@ -57,9 +58,9 @@ export interface EventoContraccion {
 }
 
 export interface CalibrationDraft {
-  musculo: MusculoTrabajo
-  mvc_uv: number
-  threshold_uv: number
+  musculo: MusculoTrabajo;
+  mvc_uv: number;       // Cambiado de 'mvc' a 'mvc_uv'
+  threshold_uv: number; // Cambiado de 'umbral' o 'threshold' a 'threshold_uv'
 }
 
 export interface PreGameConfig {

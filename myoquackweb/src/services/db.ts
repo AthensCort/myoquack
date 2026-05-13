@@ -44,7 +44,9 @@ function cloneDoctor(doctor: Doctor): Doctor {
 function clonePatient(patient: Paciente): Paciente {
   return {
     ...patient,
-    fecha_registro: new Date(patient.fecha_registro),
+    // Since types.ts defines these as strings, we just pass them through
+    fecha_registro: patient.fecha_registro,
+    fecha_nacimiento: patient.fecha_nacimiento, 
   }
 }
 
@@ -232,9 +234,8 @@ function buildPatientRowsForCsv(patients: Paciente[]) {
   const headers = [
     'id_paciente',
     'nombre_completo',
-    'edad',
+    'fecha_nacimiento', 
     'genero',
-    'lado_trabajo',
     'fecha_registro',
     'session_count',
     'last_session_date',
@@ -245,13 +246,13 @@ function buildPatientRowsForCsv(patients: Paciente[]) {
       .filter((session) => session.id_paciente === patient.id_paciente)
       .sort((a, b) => b.fecha_hora.getTime() - a.fecha_hora.getTime())
     const lastSessionDate = sessions[0]?.fecha_hora?.toISOString() ?? ''
+    
     const values = [
       patient.id_paciente,
       `${patient.nombre} ${patient.apellidos}`,
-      patient.edad,
+      patient.fecha_nacimiento, 
       patient.genero,
-      patient.lado_trabajo,
-      patient.fecha_registro.toISOString(),
+      patient.fecha_registro, // Removed .toISOString() since it's already a string
       sessions.length,
       lastSessionDate,
     ]
@@ -287,7 +288,8 @@ export function listPatients(id_medico: string): Paciente[] {
   return store.patients
     .filter((patient) => patient.id_medico === id_medico)
     .sort(
-      (a, b) => b.fecha_registro.getTime() - a.fecha_registro.getTime(),
+      // Parse the string back into a Date temporarily just for sorting math
+      (a, b) => new Date(b.fecha_registro).getTime() - new Date(a.fecha_registro).getTime(),
     )
     .map(clonePatient)
 }
@@ -302,7 +304,7 @@ export function createPatient(
   const patient: Paciente = {
     ...input,
     id_paciente: patientId,
-    fecha_registro: new Date(),
+    fecha_registro: new Date().toISOString(), // Generate a new string instead of a Date object
   }
   store.patients.push(patient)
   return clonePatient(patient)
