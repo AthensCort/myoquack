@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useHardware } from '../context/HardwareContext'
 import { useAppState } from '../context/AppStateContext'
 import { useToast } from '../context/ToastContext'
-import type { EventoContraccion, SesionEmg, SessionSimulationResult } from '../models/types'
+import type { EventoContraccion, SesionEmg } from '../models/types'
 
 import cloud     from '../assets/game/cloud.png'
 import grass     from '../assets/game/grass.png'
