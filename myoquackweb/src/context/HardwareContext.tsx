@@ -4,6 +4,7 @@ import { useToast } from './ToastContext'
 interface HardwareContextValue {
   isConnected: boolean
   emgValue: number
+  rectifiedEmgValue: number
   emgHistory: { time: string; value: number }[]
   isDemoMode: boolean
   toggleDemoMode: () => void
@@ -16,9 +17,9 @@ const HardwareContext = createContext<HardwareContextValue | undefined>(undefine
 export function HardwareProvider({ children }: { children: ReactNode }) {
   const [isConnected, setIsConnected] = useState(false)
   const [emgValue, setEmgValue] = useState<number>(0)
+  const [rectifiedEmgValue, setRectifiedEmgValue] = useState<number>(0)
   const [emgHistory, setEmgHistory] = useState<{ time: string; value: number }[]>([])
   
-  // NEW: Demo Mode State
   const [isDemoMode, setIsDemoMode] = useState(false)
   
   const { addToast } = useToast()
@@ -27,57 +28,72 @@ export function HardwareProvider({ children }: { children: ReactNode }) {
   const readerRef = useRef<any>(null)
   const keepReadingRef = useRef(false)
 
-  // NEW: The Demo Mode Engine
+  const demoKeyPressRef = useRef(false)
+
+  // ── MOTOR DEL MODO DEMO ────────────────────────────────────────────────
   useEffect(() => {
     if (!isDemoMode) return
 
-    setIsConnected(true) // Trick the app into thinking hardware is connected
-    addToast('Modo Demo: ¡Mantén presionada la barra espaciadora!', 'info')
-
-    let simulatedTarget = 100 // Resting baseline
+    setIsConnected(true)
+    addToast('Modo Demo: ¡Mantén presionada la tecla ENTER!', 'info')
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space') {
-        e.preventDefault() // Prevents the page from scrolling down!
-        simulatedTarget = 3800 // High spike, similar to a strong MVC
+      // Cambiado a Enter
+      if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+        e.preventDefault() 
+        demoKeyPressRef.current = true
       }
     }
 
     const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.code === 'Space') {
-        simulatedTarget = 100 // Drop back to rest
+      if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+        e.preventDefault()
+        demoKeyPressRef.current = false
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     window.addEventListener('keyup', handleKeyUp)
 
-    // Simulate the readLoop pushing data at ~50ms intervals
     const demoInterval = setInterval(() => {
-      // Add random noise (+/- 100) to make it look like a real biological signal
-      const noise = (Math.random() * 200) - 100
-      const currentValue = Math.max(0, simulatedTarget + noise)
+      let nextValue = 0
 
-      setEmgValue(currentValue)
+      if (demoKeyPressRef.current) {
+        // Ráfaga EMG Activa: Ruido de alta frecuencia entre -1200mV y +1200mV
+        nextValue = (Math.random() - 0.5) * 2400
+      } else {
+        // Ruido de línea base (reposo): entre -25mV y +25mV
+        nextValue = (Math.random() - 0.5) * 50
+      }
+
+      // El valor rectificado solo se usa para la lógica del juego (disparar)
+      const rectified_mV = Math.abs(nextValue)
+
+      setEmgValue(nextValue) // Bipolar (cruza el 0)
+      setRectifiedEmgValue(rectified_mV) // Absoluto (siempre positivo)
+      
       setEmgHistory((prev) => {
-        const newData = [...prev, { time: '', value: currentValue }]
+        // IMPORTANTE: Guardamos nextValue (bipolar) para que la gráfica baje a los negativos
+        const newData = [...prev, { time: '', value: nextValue }]
         return newData.length > 100 ? newData.slice(newData.length - 100) : newData
       })
     }, 50)
 
-    // Cleanup when you turn Demo Mode off
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('keyup', handleKeyUp)
       clearInterval(demoInterval)
       setIsConnected(false)
       setEmgValue(0)
+      setRectifiedEmgValue(0)
       setEmgHistory([])
+      demoKeyPressRef.current = false
     }
   }, [isDemoMode, addToast])
 
   const toggleDemoMode = () => setIsDemoMode((prev) => !prev)
 
+  // ── LÓGICA DEL HARDWARE REAL ───────────────────────────────────────────
   const connect = async () => {
     if (isDemoMode) {
       addToast('Desactiva el Modo Demo antes de conectar el hardware real.', 'error')
@@ -124,9 +140,21 @@ export function HardwareProvider({ children }: { children: ReactNode }) {
             const numericValue = parseFloat(latestReading)
 
             if (!isNaN(numericValue)) {
-              setEmgValue(numericValue)
+              // 1. Convertir ADC (0-4095) a Voltaje (0 - 3300 mV)
+              const voltage_mV = (numericValue / 4095) * 3300
+              
+              // 2. Quitar el offset de 1.7V (1700 mV) para centrar en 0
+              const bipolar_mV = voltage_mV - 1700
+              
+              // 3. Rectificar la señal (absoluto) para la lógica del juego
+              const rectified_mV = Math.abs(bipolar_mV)
+
+              setEmgValue(bipolar_mV)
+              setRectifiedEmgValue(rectified_mV)
+              
               setEmgHistory((prev) => {
-                const newData = [...prev, { time: '', value: numericValue }]
+                // Guardamos bipolar_mV para que la gráfica del hardware físico también vaya a negativos
+                const newData = [...prev, { time: '', value: bipolar_mV }]
                 return newData.length > 100 ? newData.slice(newData.length - 100) : newData
               })
             }
@@ -141,7 +169,6 @@ export function HardwareProvider({ children }: { children: ReactNode }) {
   }
 
   const disconnect = async () => {
-    // If we are in demo mode, disconnect just turns it off
     if (isDemoMode) {
       setIsDemoMode(false)
       addToast('Modo Demo desactivado', 'info')
@@ -164,6 +191,7 @@ export function HardwareProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsConnected(false)
       setEmgValue(0)
+      setRectifiedEmgValue(0)
       setEmgHistory([])
       addToast('ESP32 Desconectado.', 'info')
     }
@@ -172,7 +200,8 @@ export function HardwareProvider({ children }: { children: ReactNode }) {
   return (
     <HardwareContext.Provider value={{ 
       isConnected, 
-      emgValue, 
+      emgValue,
+      rectifiedEmgValue,
       emgHistory, 
       isDemoMode,
       toggleDemoMode,

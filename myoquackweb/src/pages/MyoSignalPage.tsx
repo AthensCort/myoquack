@@ -49,16 +49,19 @@ export function MyoSignalPage() {
              {isConnected ? (
                <div className="h-full w-full">
                  <ResponsiveContainer width="100%" height="100%">
-                   <LineChart data={emgHistory}>
+                   <LineChart data={emgHistory} margin={{ top: 10, right: 10, left: 0, bottom: 15 }} >
                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
-                     {/* Y-Axis domain sets the min and max visual bounds. 
-                         Adjust this based on the raw ADC output of your ESP32 (e.g., 0 to 4095) */}
-                     <YAxis 
-                       domain={[0, 4095]} 
-                       stroke="#64748b" 
-                       fontSize={12}
-                       tickFormatter={(val) => `${val}`}
-                     />
+                      <YAxis 
+                        domain={[-1700, 1700]} 
+                        ticks={[-1700, -850, 0, 850, 1700]} // Forces these exact intervals
+                        width={85} // Gives the labels enough room so they don't get clipped!
+                        allowDataOverflow={true} 
+                        tickFormatter={(value) => `${value} mV`}
+                        tick={{ fill: '#94A3B8', fontSize: 13, fontFamily: 'monospace' }} // Matches your retro/tech theme
+                        axisLine={{ stroke: '#334155', strokeWidth: 2 }} // Slightly thicker axis line
+                        tickLine={{ stroke: '#334155' }}
+                        tickMargin={5} // Pushes the text a tiny bit away from the line
+                      />
                      <XAxis dataKey="time" hide />
                      <Line 
                        type="monotone" 

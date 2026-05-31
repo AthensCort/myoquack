@@ -20,9 +20,9 @@ app.get("/health", (_, res) => {
   res.json({ ok: true });
 });
 
-app.use("/auth", authRoutes);
-app.use("/pacientes", requireAuth, pacientesRoutes);
-app.use("/sesiones", requireAuth, sesionesRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/pacientes", requireAuth, pacientesRoutes);
+app.use("/api/sesiones", requireAuth, sesionesRoutes);
 
 // Ruta simple de chequeo para confirmar servidor y docs
 app.get("/", (_, res) => {
